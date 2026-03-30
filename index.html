@@ -309,6 +309,10 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
       <div class="action-plan-title">⚡ Priority Action Plan</div>
       <div id="priorityItems"></div>
     </div>
+    <div class="prompt-section" id="promptSection" style="display:none">
+      <div class="prompt-label">Would you like the AI prompt to fix these issues?</div>
+      <button class="prompt-btn" onclick="showPrompt()">⚡ Get AI Fix Prompt</button>
+    </div>
     <div class="email-section" id="emailSection" style="display:none">
       <div class="email-label">Get this report in your inbox</div>
       <div class="email-row">
@@ -579,6 +583,7 @@ function renderResults(data,url){
   });
 
   document.getElementById('results').style.display='block';
+  document.getElementById('promptSection').style.display='block';
   document.getElementById('emailSection').style.display='block';
   setTimeout(()=>{
     document.getElementById('overallScore').classList.add('visible');
