@@ -29,13 +29,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .ray{position:absolute;top:50%;left:50%;width:350px;height:2px;transform-origin:left center;background:linear-gradient(90deg,rgba(251,191,36,.35),transparent)}
 
 /* Storm clouds */
-.storm-cloud{position:fixed;border-radius:50%;background:rgba(20,10,50,.7);filter:blur(50px);pointer-events:none;z-index:2;opacity:0;transition:opacity 1.2s ease}
+.storm-cloud{position:fixed;border-radius:50%;background:rgba(15,15,25,.75);filter:blur(50px);pointer-events:none;z-index:2;opacity:0;transition:opacity 1.2s ease}
 
 /* Lightning */
 .lightning-container{position:fixed;inset:0;pointer-events:none;z-index:100;display:none}
 .lightning-container.active{display:block}
-.lightning-bolt{position:absolute;top:0;width:4px;background:linear-gradient(180deg,#fff 0%,#c4b5fd 25%,#7c6af7 55%,transparent 100%);border-radius:2px;opacity:0;filter:blur(0.5px);box-shadow:0 0 20px #7c6af7,0 0 40px #7c6af7,0 0 80px rgba(124,106,247,.6)}
-.lightning-flash{position:fixed;inset:0;background:rgba(200,190,255,.2);opacity:0;pointer-events:none;z-index:99}
+.lightning-bolt{position:absolute;width:3px;background:linear-gradient(var(--bolt-angle,180deg),#fff 0%,rgba(255,255,255,.8) 30%,rgba(220,230,255,.5) 60%,transparent 100%);border-radius:2px;opacity:0;filter:blur(0.3px);box-shadow:0 0 15px #fff,0 0 30px rgba(255,255,255,.7),0 0 60px rgba(200,220,255,.4)}
+.lightning-flash{position:fixed;inset:0;background:rgba(255,255,255,.15);opacity:0;pointer-events:none;z-index:99}
 @keyframes boltStrike{0%{opacity:0;transform:scaleY(0);transform-origin:top}10%{opacity:1;transform:scaleY(1)}20%{opacity:.8}35%{opacity:1}55%{opacity:.3}70%{opacity:0}100%{opacity:0}}
 @keyframes flashPulse{0%{opacity:0}5%{opacity:1}15%{opacity:0}22%{opacity:.6}35%{opacity:0}100%{opacity:0}}
 
@@ -377,17 +377,42 @@ function createBolt(){
   const c=document.getElementById('lightningContainer');
   const b=document.createElement('div');
   b.className='lightning-bolt';
-  b.style.left=(10+Math.random()*80)+'vw';
-  b.style.height=(200+Math.random()*400)+'px';
-  b.style.top='0px';
-  b.style.width=(2+Math.random()*3)+'px';
-  b.style.transform=`rotate(${-8+Math.random()*16}deg)`;
+  const side=Math.random();
+  const len=150+Math.random()*350;
+  b.style.width=(2+Math.random()*2.5)+'px';
+  b.style.height=len+'px';
+  if(side<0.4){
+    // From top
+    b.style.top='0px';
+    b.style.left=(5+Math.random()*90)+'vw';
+    b.style.setProperty('--bolt-angle','180deg');
+    b.style.transform=`rotate(${-12+Math.random()*24}deg)`;
+  } else if(side<0.6){
+    // From left
+    b.style.top=(10+Math.random()*70)+'vh';
+    b.style.left='0px';
+    b.style.setProperty('--bolt-angle','90deg');
+    b.style.transform=`rotate(${60+Math.random()*30}deg)`;
+  } else if(side<0.8){
+    // From right
+    b.style.top=(10+Math.random()*70)+'vh';
+    b.style.right='0px';
+    b.style.left='auto';
+    b.style.setProperty('--bolt-angle','90deg');
+    b.style.transform=`rotate(${-90+Math.random()*30}deg)`;
+  } else {
+    // Diagonal across middle
+    b.style.top=(Math.random()*50)+'vh';
+    b.style.left=(10+Math.random()*80)+'vw';
+    b.style.setProperty('--bolt-angle','180deg');
+    b.style.transform=`rotate(${-45+Math.random()*90}deg)`;
+  }
   c.appendChild(b);
-  b.style.animation=`boltStrike ${.4+Math.random()*.3}s ease forwards`;
+  b.style.animation=`boltStrike ${.35+Math.random()*.3}s ease forwards`;
   const f=document.getElementById('lightningFlash');
   f.style.animation='none';
   void f.offsetWidth;
-  f.style.animation='flashPulse .6s ease forwards';
+  f.style.animation='flashPulse .5s ease forwards';
   setTimeout(()=>b.remove(),900);
 }
 
