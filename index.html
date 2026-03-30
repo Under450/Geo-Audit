@@ -163,6 +163,28 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .impact-high{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
 .impact-med{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
 .impact-low{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+/* AI Prompt button */
+.prompt-section{text-align:center;margin-top:24px;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;transition:background 2.5s ease,border-color 2.5s ease}
+.prompt-label{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:14px;transition:color 2.5s ease}
+.prompt-btn{background:linear-gradient(135deg,var(--accent),#9b6af7);color:#fff;border:none;border-radius:12px;padding:16px 28px;font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:10px;text-transform:uppercase}
+.prompt-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,106,247,.5)}
+
+/* Prompt Modal */
+.prompt-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px}
+.prompt-overlay.open{display:flex}
+.prompt-modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:720px;width:100%;max-height:85vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.prompt-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid var(--border);flex-shrink:0}
+.prompt-modal-title{font-family:var(--sans);font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
+.prompt-close{background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:18px;transition:all .2s}
+.prompt-close:hover{border-color:var(--accent);color:var(--text)}
+.prompt-body{padding:24px 28px;overflow-y:auto;flex:1}
+.prompt-text{font-family:var(--mono);font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:12px;padding:20px;max-height:50vh;overflow-y:auto}
+.prompt-modal-footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;gap:12px;justify-content:flex-end;flex-shrink:0}
+.copy-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.copy-btn:hover{background:#6b5ce6;transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,106,247,.4)}
+.copy-btn.copied{background:var(--green)}
+.prompt-hint{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+
 /* Email button */
 .email-section{text-align:center;margin-top:32px;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;transition:background 2.5s ease,border-color 2.5s ease}
 .email-row{display:flex;gap:12px;align-items:stretch;max-width:480px;margin:0 auto}
@@ -287,6 +309,10 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
       <div class="action-plan-title">⚡ Priority Action Plan</div>
       <div id="priorityItems"></div>
     </div>
+    <div class="prompt-section" id="promptSection" style="display:none">
+      <div class="prompt-label">Want AI to fix these issues for you?</div>
+      <button class="prompt-btn" onclick="showPrompt()">⚡ Get AI Fix Prompt</button>
+    </div>
     <div class="email-section" id="emailSection" style="display:none">
       <div class="email-label">Get this report in your inbox</div>
       <div class="email-row">
@@ -301,6 +327,22 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     Powered by CJ
     <br><br>Results are AI-generated. Verify with a qualified professional.
   </footer>
+</div>
+
+<div class="prompt-overlay" id="promptOverlay" onclick="if(event.target===this)closePrompt()">
+  <div class="prompt-modal">
+    <div class="prompt-modal-header">
+      <div class="prompt-modal-title">⚡ AI Fix Prompt</div>
+      <button class="prompt-close" onclick="closePrompt()">✕</button>
+    </div>
+    <div class="prompt-body">
+      <div class="prompt-text" id="promptText"></div>
+    </div>
+    <div class="prompt-modal-footer">
+      <div class="prompt-hint">Paste this into ChatGPT, Claude or any AI</div>
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">📋 Copy to Clipboard</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -541,6 +583,7 @@ function renderResults(data,url){
   });
 
   document.getElementById('results').style.display='block';
+  document.getElementById('promptSection').style.display='block';
   document.getElementById('emailSection').style.display='block';
   setTimeout(()=>{
     document.getElementById('overallScore').classList.add('visible');
@@ -557,6 +600,61 @@ function ts(header){
 }
 
 document.getElementById('urlInput').addEventListener('keydown',e=>{if(e.key==='Enter')runAudit();});
+
+function buildPrompt(){
+  if(!lastAuditData)return'';
+  const d=lastAuditData;
+  let p=`I need you to fix the GEO (Generative Engine Optimisation) issues on my website: ${lastAuditUrl}\n\n`;
+  p+=`A GEO audit scored this site ${d.overall_score}/100 (Grade ${d.grade}). ${d.summary}\n\n`;
+  p+=`Here are the scores:\n`;
+  const sl={ai_crawler_access:'AI Crawler Access',citation_readiness:'Citation Readiness',schema_markup:'Schema & Structured Data',brand_authority:'Brand Authority',content_quality:'Content Quality',technical_seo:'Technical SEO'};
+  Object.entries(d.scores||{}).forEach(([k,v])=>{p+=`- ${sl[k]||k}: ${v}/100\n`;});
+  p+=`\n---\n\nHere is every issue found, grouped by category. For each one, implement the fix described.\n\n`;
+  (d.sections||[]).forEach(s=>{
+    p+=`## ${s.title} (${s.status.toUpperCase()})\n\n`;
+    (s.findings||[]).forEach(f=>{
+      p+=`[${f.type.toUpperCase()}] ${f.title}\n`;
+      p+=`  ${f.description}\n`;
+      if(f.action)p+=`  FIX: ${f.action}\n`;
+      p+=`\n`;
+    });
+  });
+  p+=`---\n\nPriority actions (in order of impact):\n\n`;
+  (d.priorities||[]).forEach((pr,i)=>{
+    p+=`${i+1}. [${pr.impact.toUpperCase()} IMPACT] ${pr.title}\n   ${pr.description}\n\n`;
+  });
+  p+=`---\n\nInstructions:\n`;
+  p+=`- Fix every issue listed above\n`;
+  p+=`- Show me the exact code changes needed for each fix\n`;
+  p+=`- Start with the high-impact priorities first\n`;
+  p+=`- For schema markup, provide complete JSON-LD blocks I can paste into my HTML <head>\n`;
+  p+=`- For new files (robots.txt, sitemap.xml, llms.txt), provide the complete file contents\n`;
+  p+=`- Keep explanations brief — focus on the actual code and content I need to add or change\n`;
+  return p;
+}
+
+function showPrompt(){
+  const p=buildPrompt();
+  if(!p)return;
+  document.getElementById('promptText').textContent=p;
+  document.getElementById('promptOverlay').classList.add('open');
+  document.getElementById('copyBtn').textContent='📋 Copy to Clipboard';
+  document.getElementById('copyBtn').classList.remove('copied');
+}
+
+function closePrompt(){
+  document.getElementById('promptOverlay').classList.remove('open');
+}
+
+function copyPrompt(){
+  const p=buildPrompt();
+  navigator.clipboard.writeText(p).then(()=>{
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy to Clipboard';btn.classList.remove('copied');},2500);
+  });
+}
 document.getElementById('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')emailReport();});
 
 let lastAuditData=null;
