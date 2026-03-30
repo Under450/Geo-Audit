@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightning & Colour Preview — Pick Your Style</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0f;color:#fff;font-family:'Segoe UI',sans-serif;padding:32px}
+h1{text-align:center;font-size:28px;margin-bottom:8px}
+.sub{text-align:center;color:#888;font-size:14px;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+.card{border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.card.selected{outline:3px solid #22c55e;outline-offset:2px}
+.card.selected::after{content:'SELECTED';position:absolute;top:12px;right:12px;background:#22c55e;color:#000;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.06em;z-index:20}
+.preview{height:220px;position:relative;overflow:hidden}
+.preview canvas{width:100%;height:100%}
+.label{padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.name{font-size:16px;font-weight:700}
+.desc{font-size:12px;color:#888}
+.colours{display:flex;gap:6px;margin-top:8px}
+.swatch{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.15)}
+.confirm{display:none;text-align:center;margin-top:40px}
+.confirm.show{display:block}
+.confirm-btn{background:#22c55e;color:#000;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em}
+.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,.4)}
+.selected-name{font-size:18px;color:#22c55e;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<h1>Choose Your Lightning Style</h1>
+<p class="sub">Click a card to select. Each preview shows live lightning animation.</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="confirm" id="confirm">
+  <div class="selected-name" id="selectedName"></div>
+  <button class="confirm-btn" onclick="copyChoice()">Copy Choice — Tell Craig in Chat</button>
+  <p style="color:#888;font-size:12px;margin-top:12px" id="confirmMsg"></p>
+</div>
+
+<script>
+const themes=[
+  {
+    id:'white-storm',
+    name:'White Storm',
+    desc:'Pure white bolts, white flash, no colour tint',
+    bg:'#0a0a0f',
+    bolt:['#ffffff','rgba(255,255,255,.8)','rgba(220,230,255,.5)'],
+    glow:'rgba(255,255,255,.7)',
+    flash:'rgba(255,255,255,.15)',
+    cloud:'rgba(15,15,25,.75)',
+    swatches:['#ffffff','#dce6ff','#0a0a0f']
+  },
+  {
+    id:'electric-blue',
+    name:'Electric Blue',
+    desc:'Cyan-blue bolts with icy blue glow',
+    bg:'#060610',
+    bolt:['#ffffff','#7dd3fc','#0ea5e9'],
+    glow:'rgba(14,165,233,.7)',
+    flash:'rgba(125,211,252,.12)',
+    cloud:'rgba(5,10,30,.8)',
+    swatches:['#ffffff','#7dd3fc','#0ea5e9']
+  },
+  {
+    id:'gold-thunder',
+    name:'Gold Thunder',
+    desc:'Warm gold/amber bolts with golden flash',
+    bg:'#0a0908',
+    bolt:['#ffffff','#fbbf24','#f59e0b'],
+    glow:'rgba(251,191,36,.6)',
+    flash:'rgba(251,191,36,.1)',
+    cloud:'rgba(20,15,5,.8)',
+    swatches:['#ffffff','#fbbf24','#f59e0b']
+  },
+  {
+    id:'purple-original',
+    name:'Purple (Original)',
+    desc:'The original violet/purple style',
+    bg:'#0a0a0f',
+    bolt:['#ffffff','#c4b5fd','#7c6af7'],
+    glow:'rgba(124,106,247,.6)',
+    flash:'rgba(200,190,255,.15)',
+    cloud:'rgba(20,10,50,.75)',
+    swatches:['#ffffff','#c4b5fd','#7c6af7']
+  },
+  {
+    id:'green-matrix',
+    name:'Green Matrix',
+    desc:'Neon green bolts, cyberpunk feel',
+    bg:'#050a05',
+    bolt:['#ffffff','#4ade80','#22c55e'],
+    glow:'rgba(34,197,94,.6)',
+    flash:'rgba(74,222,128,.1)',
+    cloud:'rgba(5,15,5,.8)',
+    swatches:['#ffffff','#4ade80','#22c55e']
+  },
+  {
+    id:'red-fury',
+    name:'Red Fury',
+    desc:'Intense red/orange bolts, dramatic flash',
+    bg:'#0a0505',
+    bolt:['#ffffff','#fca5a5','#ef4444'],
+    glow:'rgba(239,68,68,.6)',
+    flash:'rgba(252,165,165,.12)',
+    cloud:'rgba(25,5,5,.8)',
+    swatches:['#ffffff','#fca5a5','#ef4444']
+  }
+];
+
+let selected=null;
+const canvases={};
+const intervals={};
+
+function buildCards(){
+  const grid=document.getElementById('grid');
+  themes.forEach(t=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.id='card-'+t.id;
+    card.onclick=()=>select(t.id);
+    const sw=t.swatches.map(c=>`<div class="swatch" style="background:${c}"></div>`).join('');
+    card.innerHTML=`<div class="preview"><canvas id="cv-${t.id}"></canvas></div><div class="label" style="background:${t.bg};border-top:1px solid rgba(255,255,255,.06)"><div><div class="name">${t.name}</div><div class="desc">${t.desc}</div><div class="colours">${sw}</div></div></div>`;
+    grid.appendChild(card);
+  });
+}
+
+function startAnimation(t){
+  const cv=document.getElementById('cv-'+t.id);
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.offsetWidth*dpr;
+  cv.height=cv.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const w=cv.offsetWidth,h=cv.offsetHeight;
+  let bolts=[];
+
+  function addBolt(){
+    const side=Math.random();
+    let x,y,angle,len=60+Math.random()*140;
+    if(side<0.4){x=Math.random()*w;y=0;angle=(75+Math.random()*30)*Math.PI/180;}
+    else if(side<0.6){x=0;y=20+Math.random()*(h-40);angle=(10+Math.random()*40)*Math.PI/180;}
+    else if(side<0.8){x=w;y=20+Math.random()*(h-40);angle=(140+Math.random()*30)*Math.PI/180;}
+    else{x=Math.random()*w;y=Math.random()*h*.4;angle=(45+Math.random()*90)*Math.PI/180;}
+    bolts.push({x,y,angle,len,width:1+Math.random()*2,life:1,decay:.03+Math.random()*.02,flash:1,colors:t.bolt,glow:t.glow});
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    // Background
+    ctx.fillStyle=t.bg;
+    ctx.fillRect(0,0,w,h);
+    // Cloud
+    ctx.fillStyle=t.cloud;
+    ctx.beginPath();ctx.ellipse(w*.2,0,200,80,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(w*.8,0,250,100,0,0,Math.PI*2);ctx.fill();
+
+    bolts.forEach(b=>{
+      if(b.life<=0)return;
+      const ex=b.x+Math.cos(b.angle)*b.len;
+      const ey=b.y+Math.sin(b.angle)*b.len;
+
+      // Flash
+      if(b.flash>.5){
+        ctx.fillStyle=t.flash;
+        ctx.fillRect(0,0,w,h);
+      }
+      b.flash*=.85;
+
+      // Glow
+      ctx.save();
+      ctx.globalAlpha=b.life*.6;
+      ctx.shadowColor=b.glow;
+      ctx.shadowBlur=25;
+      ctx.strokeStyle=b.colors[1];
+      ctx.lineWidth=b.width+4;
+      ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(ex,ey);ctx.stroke();
+      ctx.restore();
+
+      // Core bolt
+      ctx.save();
+      ctx.globalAlpha=b.life;
+      ctx.shadowColor='#fff';
+      ctx.shadowBlur=10;
+      const grad=ctx.createLinearGradient(b.x,b.y,ex,ey);
+      grad.addColorStop(0,b.colors[0]);
+      grad.addColorStop(.4,b.colors[1]);
+      grad.addColorStop(.8,b.colors[2]);
+      grad.addColorStop(1,'transparent');
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=b.width;
+      ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(ex,ey);ctx.stroke();
+      ctx.restore();
+
+      // Branch
+      if(b.life>.7&&Math.random()>.7){
+        const mid=.3+Math.random()*.4;
+        const mx=b.x+Math.cos(b.angle)*b.len*mid;
+        const my=b.y+Math.sin(b.angle)*b.len*mid;
+        const ba=b.angle+(-0.5+Math.random())*1.2;
+        const bl=30+Math.random()*50;
+        const bex=mx+Math.cos(ba)*bl;
+        const bey=my+Math.sin(ba)*bl;
+        ctx.save();
+        ctx.globalAlpha=b.life*.5;
+        ctx.strokeStyle=b.colors[1];
+        ctx.lineWidth=1;
+        ctx.shadowColor=b.glow;
+        ctx.shadowBlur=8;
+        ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(bex,bey);ctx.stroke();
+        ctx.restore();
+      }
+
+      b.life-=b.decay;
+    });
+    bolts=bolts.filter(b=>b.life>0);
+  }
+
+  function tick(){
+    if(Math.random()>.55)addBolt();
+    if(Math.random()>.75)addBolt();
+    draw();
+  }
+
+  intervals[t.id]=setInterval(tick,120);
+}
+
+function select(id){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('card-'+id).classList.add('selected');
+  selected=id;
+  const t=themes.find(x=>x.id===id);
+  document.getElementById('selectedName').textContent='Selected: '+t.name;
+  document.getElementById('confirm').classList.add('show');
+  document.getElementById('confirmMsg').textContent='';
+}
+
+function copyChoice(){
+  const t=themes.find(x=>x.id===selected);
+  const msg=`I choose "${t.name}" — ${t.desc}. Bolt colours: ${t.swatches.join(', ')}`;
+  navigator.clipboard.writeText(msg).then(()=>{
+    document.getElementById('confirmMsg').textContent='Copied! Paste this back in your Claude chat.';
+  });
+}
+
+buildCards();
+themes.forEach(t=>startAnimation(t));
+</script>
+</body>
+</html>
