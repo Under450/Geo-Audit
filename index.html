@@ -250,18 +250,71 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 
 @media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:72px}}
 
+/* Score bars */
+.score-bars{margin-bottom:24px}
+.bar-row{margin-bottom:16px}
+.bar-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;margin-bottom:8px}
+.bar-name{color:var(--muted)}
+.bar-val{font-weight:600}
+.bar-track{height:10px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:5px;position:relative;width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+.bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(255,255,255,.2));border-radius:5px}
+.bar-fill.green{background:linear-gradient(90deg,#16a34a,#22c55e);box-shadow:0 0 12px rgba(34,197,94,.3)}
+.bar-fill.amber{background:linear-gradient(90deg,#d97706,#f59e0b);box-shadow:0 0 12px rgba(245,158,11,.3)}
+.bar-fill.red{background:linear-gradient(90deg,#dc2626,#ef4444);box-shadow:0 0 12px rgba(239,68,68,.3)}
+
+/* Platform readiness */
+.platform-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;opacity:0;transition:opacity .6s}
+.platform-section.visible{opacity:1}
+.platform-section-title{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px;text-align:center}
+.platform-row{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.platform{text-align:center}
+.platform-ring{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.platform-ring.ready{background:rgba(34,197,94,.1);border:2px solid rgba(34,197,94,.4);box-shadow:0 0 16px rgba(34,197,94,.2),inset 0 0 12px rgba(34,197,94,.1)}
+.platform-ring.partial{background:rgba(245,158,11,.1);border:2px solid rgba(245,158,11,.4);box-shadow:0 0 16px rgba(245,158,11,.2),inset 0 0 12px rgba(245,158,11,.1)}
+.platform-ring.blocked{background:rgba(239,68,68,.1);border:2px solid rgba(239,68,68,.4);box-shadow:0 0 16px rgba(239,68,68,.2),inset 0 0 12px rgba(239,68,68,.1)}
+.platform-dot{width:12px;height:12px;border-radius:50%}
+.platform-ring.ready .platform-dot{background:#22c55e;box-shadow:0 0 8px #22c55e}
+.platform-ring.partial .platform-dot{background:#f59e0b;box-shadow:0 0 8px #f59e0b}
+.platform-ring.blocked .platform-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
+.platform-name{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.platform-status{font-family:var(--mono);font-size:11px;margin-top:2px}
+.platform-status.s-ready{color:var(--green)}
+.platform-status.s-partial{color:var(--amber)}
+.platform-status.s-blocked{color:var(--red)}
+
+/* Issue donut */
+.donut-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;text-align:center;opacity:0;transition:opacity .6s}
+.donut-section.visible{opacity:1}
+.donut-section-title{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
+.donut-wrap{position:relative;width:180px;height:180px;margin:0 auto}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.donut-num{font-family:var(--serif);font-size:40px;color:var(--text);line-height:1}
+.donut-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.donut-legend{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:center;margin-top:20px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.donut-legend span{display:flex;align-items:center;gap:6px}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+
+/* Timeline */
+.timeline-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;opacity:0;transition:opacity .6s}
+.timeline-section.visible{opacity:1}
+.timeline-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:16px}
+.timeline-change{font-weight:600}
+.timeline-change.up{color:var(--green)}
+.timeline-change.down{color:var(--red)}
+
 /* Print stylesheet */
 @media print{
   #passwordScreen,.bg-grid,.bg-glow,.sky-overlay,.sun,.sun-rays,.lightning-container,.storm-cloud,.input-section,#loadingState,.prompt-section,.email-section,footer,.prompt-overlay,.history-banner{display:none!important}
   body,body.sunny{background:#fff!important;color:#000!important}
   .container{max-width:100%;padding:0}
   #results{display:block!important}
-  .overall-score,.score-card,.report-section,.action-plan,.comparison{opacity:1!important;break-inside:avoid}
+  .overall-score,.score-card,.report-section,.action-plan,.comparison,.score-bars,.platform-section,.donut-section,.timeline-section{opacity:1!important;break-inside:avoid}
   .overall-score::before{background:#333!important}
   .score-card::before{print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .report-section{break-inside:avoid}
   .section-body{max-height:none!important;padding:16px!important}
-  .results-header,.overall-score,.score-grid,.comparison,#reportSections,.action-plan{margin-bottom:16px}
+  .results-header,.overall-score,.score-grid,.score-bars,.comparison,.platform-section,.donut-section,.timeline-section,#reportSections,.action-plan{margin-bottom:16px}
   .results-title{color:#000!important;font-size:20px!important}
   .results-title .print-name{color:#f97316!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   *{transition:none!important;animation:none!important}
@@ -353,6 +406,13 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 
   <div id="results">
     <div class="history-banner" id="historyBanner"></div>
+    <div class="timeline-section" id="timelineSection" style="display:none">
+      <div class="timeline-header">
+        <span>Score History</span>
+        <span class="timeline-change" id="timelineChange"></span>
+      </div>
+      <div id="timelineChart"></div>
+    </div>
     <div class="results-header">
       <span class="results-title" id="pdfPersonalisation">GEO Audit Report</span>
       <span class="audited-url" id="auditedUrl"></span>
@@ -363,8 +423,16 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
       <div class="overall-grade" id="scoreGrade"></div>
       <div class="overall-summary" id="scoreSummary"></div>
     </div>
-    <div class="score-grid" id="scoreGrid"></div>
+    <div class="score-bars" id="scoreBars"></div>
+    <div class="platform-section" id="platformSection">
+      <div class="platform-section-title">AI Platform Readiness</div>
+      <div class="platform-row" id="platformRow"></div>
+    </div>
     <div id="comparisonSection" style="display:none"></div>
+    <div class="donut-section" id="donutSection">
+      <div class="donut-section-title">Issue Breakdown</div>
+      <div id="donutChart"></div>
+    </div>
     <div id="reportSections"></div>
     <div class="action-plan" id="actionPlan">
       <div class="action-plan-title">&#9889; Priority Action Plan</div>
@@ -783,15 +851,100 @@ function renderResults(data,url){
   ge.className='overall-grade '+({A:'grade-a',B:'grade-b',C:'grade-c',D:'grade-d'}[data.grade]||'grade-c');
   document.getElementById('scoreSummary').textContent=data.summary;
 
-  const sg=document.getElementById('scoreGrid');sg.innerHTML='';
+  // Score bars
+  const sb2=document.getElementById('scoreBars');sb2.innerHTML='';
   const sl={ai_crawler_access:'AI Crawlers',citation_readiness:'Citation Ready',schema_markup:'Schema',brand_authority:'Brand Authority',content_quality:'Content Quality',technical_seo:'Technical SEO'};
-  Object.entries(data.scores||{}).forEach(([k,v],i)=>{
-    const c=document.createElement('div');
-    c.className=`score-card ${sc(v)}`;
-    c.innerHTML=`<div class="score-number">${v}</div><div class="score-label">${sl[k]||k}</div>`;
-    sg.appendChild(c);
-    setTimeout(()=>c.classList.add('visible'),i*80);
+  Object.entries(data.scores||{}).forEach(([k,v])=>{
+    const colorClass=v>=60?'green':v>=40?'amber':'red';
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<div class="bar-header"><span class="bar-name">${sl[k]||k}</span><span class="bar-val" style="color:${scoreColor(v)}">${v}/100</span></div><div class="bar-track"><div class="bar-fill ${colorClass}" data-width="${v}"></div></div>`;
+    sb2.appendChild(row);
   });
+  setTimeout(()=>{sb2.querySelectorAll('.bar-fill').forEach(f=>{f.style.width=f.dataset.width+'%';});},100);
+
+  // Platform readiness
+  const pr=document.getElementById('platformRow');pr.innerHTML='';
+  const platforms=[
+    {name:'ChatGPT',score:data.scores.ai_crawler_access},
+    {name:'Claude',score:data.scores.ai_crawler_access},
+    {name:'Perplexity',score:data.scores.citation_readiness},
+    {name:'Gemini',score:data.scores.brand_authority},
+    {name:'Google AI',score:Math.round((data.scores.technical_seo+data.scores.schema_markup)/2)}
+  ];
+  platforms.forEach(p=>{
+    const status=p.score>=60?'ready':p.score>=40?'partial':'blocked';
+    const statusText=status==='ready'?'Ready':status==='partial'?'Partial':'Blocked';
+    const div=document.createElement('div');div.className='platform';
+    div.innerHTML=`<div class="platform-ring ${status}"><div class="platform-dot"></div></div><div class="platform-name">${p.name}</div><div class="platform-status s-${status}">${statusText}</div>`;
+    pr.appendChild(div);
+  });
+  setTimeout(()=>document.getElementById('platformSection').classList.add('visible'),300);
+
+  // Donut chart
+  const counts={pass:0,warn:0,fail:0,info:0};
+  (data.sections||[]).forEach(s=>(s.findings||[]).forEach(f=>{if(counts.hasOwnProperty(f.type))counts[f.type]++;else counts.info++;}));
+  const total=counts.pass+counts.warn+counts.fail+counts.info;
+  const donutColors={fail:'#ef4444',warn:'#f59e0b',pass:'#22c55e',info:'#6b9fff'};
+  const donutEl=document.getElementById('donutChart');
+  if(total>0){
+    const r=80,cx=90,cy=90,sw=16;
+    let segments='',cumAngle=-90;
+    const order=['fail','warn','pass','info'];
+    order.forEach(type=>{
+      if(counts[type]===0)return;
+      const angle=(counts[type]/total)*360;
+      const startRad=(cumAngle*Math.PI)/180;
+      const endRad=((cumAngle+angle)*Math.PI)/180;
+      const x1=cx+r*Math.cos(startRad),y1=cy+r*Math.sin(startRad);
+      const x2=cx+r*Math.cos(endRad),y2=cy+r*Math.sin(endRad);
+      const large=angle>180?1:0;
+      segments+=`<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2}" fill="none" stroke="${donutColors[type]}" stroke-width="${sw}" filter="url(#donutGlow)" />`;
+      cumAngle+=angle;
+    });
+    let legendHtml='';
+    order.forEach(type=>{if(counts[type]>0)legendHtml+=`<span><span class="legend-dot" style="background:${donutColors[type]}"></span>${type.charAt(0).toUpperCase()+type.slice(1)}: ${counts[type]}</span>`;});
+    donutEl.innerHTML=`<div class="donut-wrap"><svg width="180" height="180" viewBox="0 0 180 180"><defs><filter id="donutGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>${segments}</svg><div class="donut-center"><div class="donut-num">${total}</div><div class="donut-sub">findings</div></div></div><div class="donut-legend">${legendHtml}</div>`;
+  }
+  setTimeout(()=>document.getElementById('donutSection').classList.add('visible'),500);
+
+  // Timeline chart
+  const allHistory=getHistory().filter(h=>h.url===url);
+  const timelineSec=document.getElementById('timelineSection');
+  if(allHistory.length>=2){
+    timelineSec.style.display='block';
+    const entries=allHistory.slice(-8);
+    const changeEl=document.getElementById('timelineChange');
+    const lastDiff=entries[entries.length-1].overall_score-entries[entries.length-2].overall_score;
+    if(lastDiff>0){changeEl.className='timeline-change up';changeEl.textContent='+'+lastDiff+' pts';}
+    else if(lastDiff<0){changeEl.className='timeline-change down';changeEl.textContent=lastDiff+' pts';}
+    else{changeEl.className='timeline-change';changeEl.textContent='No change';}
+    const w=600,h=200,pad=40,chartW=w-pad*2,chartH=h-pad*2;
+    const minS=Math.max(0,Math.min(...entries.map(e=>e.overall_score))-10);
+    const maxS=Math.min(100,Math.max(...entries.map(e=>e.overall_score))+10);
+    const pts=entries.map((e,i)=>{
+      const x=pad+(entries.length===1?chartW/2:(i/(entries.length-1))*chartW);
+      const y=pad+chartH-(((e.overall_score-minS)/(maxS-minS))*chartH);
+      return{x,y,score:e.overall_score,date:new Date(e.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
+    });
+    const line=pts.map((p,i)=>(i===0?'M':'L')+p.x+','+p.y).join(' ');
+    const area=line+` L${pts[pts.length-1].x},${pad+chartH} L${pts[0].x},${pad+chartH} Z`;
+    let labels='';
+    pts.forEach((p,i)=>{
+      labels+=`<text x="${p.x}" y="${pad+chartH+18}" text-anchor="middle" fill="#b0b0c0" font-family="var(--mono)" font-size="11">${p.date}</text>`;
+      labels+=`<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="#f5f5ff" font-family="var(--mono)" font-size="12" font-weight="600">${p.score}</text>`;
+    });
+    let dots='';
+    pts.forEach((p,i)=>{
+      const isLast=i===pts.length-1;
+      const rr=isLast?6:4;
+      dots+=`<circle cx="${p.x}" cy="${p.y}" r="${rr}" fill="#0a0a0f" stroke="#f97316" stroke-width="2" ${isLast?'filter="url(#timelineGlow)"':''}/>`;
+    });
+    const chartEl=document.getElementById('timelineChart');
+    chartEl.innerHTML=`<svg width="100%" viewBox="0 0 ${w} ${h+24}" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(249,115,22,.2)"/><stop offset="100%" stop-color="transparent"/></linearGradient><filter id="lineGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="timelineGlow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="${area}" fill="url(#areaGrad)"/><path d="${line}" fill="none" stroke="#f97316" stroke-width="2.5" filter="url(#lineGlow)"/>${dots}${labels}</svg>`;
+    setTimeout(()=>timelineSec.classList.add('visible'),150);
+  } else {
+    timelineSec.style.display='none';
+  }
 
   const se=document.getElementById('reportSections');se.innerHTML='';
   (data.sections||[]).forEach((s,i)=>{
