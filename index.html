@@ -81,6 +81,8 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .audit-btn{background:#fff;color:#0a0a0f;border:none;border-radius:12px;padding:16px 28px;font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px;text-transform:uppercase}
 .audit-btn:hover:not(:disabled){background:#dce6ff;transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,255,255,.3)}
 .audit-btn:disabled{opacity:.5;cursor:not-allowed}
+.comp-row{display:flex;gap:12px;margin-top:8px}
+.comp-input{flex:1}
 .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:24px}
 .check-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:15px;color:var(--muted);transition:color 2.5s ease}
 .check-icon{color:var(--accent);font-size:10px;transition:color 2.5s ease}
@@ -200,6 +202,25 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .email-status.success{color:var(--green)}
 .email-status.error{color:var(--red)}
 
+/* Comparison section */
+.comparison{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px}
+.comparison-title{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px;text-align:center}
+.comparison-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.comp-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.comp-card.winner{border-color:var(--green);box-shadow:0 0 20px rgba(34,197,94,.1)}
+.comp-hostname{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.comp-score{font-family:var(--serif);font-size:56px;font-weight:400;line-height:1;margin-bottom:8px}
+.comp-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:16px;overflow:hidden}
+.comp-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.comp-sub-scores{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.comp-sub{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;padding:3px 0}
+.comp-sub-val{font-weight:500}
+
+/* History banner */
+.history-banner{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:14px 20px;margin-bottom:16px;font-family:var(--mono);font-size:13px;color:var(--muted);display:none;text-align:center}
+.history-banner .improved{color:var(--green)}
+.history-banner .declined{color:var(--red)}
+
 footer{margin-top:60px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:32px;transition:color 2.5s ease,border-color 2.5s ease}
 footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 .error-msg{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:16px 20px;font-family:var(--mono);font-size:12px;color:var(--red);margin-top:16px;display:none}
@@ -220,7 +241,22 @@ body.sunny .url-input::placeholder{color:#a8a29e}
 body.sunny .check-icon{color:#d97706}
 body.sunny .input-section::before{background:linear-gradient(90deg,transparent,rgba(217,119,6,.4),transparent)}
 
-@media(max-width:600px){.input-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:72px}}
+@media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:72px}}
+
+/* Print stylesheet */
+@media print{
+  #passwordScreen,.bg-grid,.bg-glow,.sky-overlay,.sun,.sun-rays,.lightning-container,.storm-cloud,.input-section,#loadingState,.prompt-section,.email-section,.pdf-section,footer,.prompt-overlay{display:none!important}
+  body,body.sunny{background:#fff!important;color:#000!important}
+  .container{max-width:100%;padding:0}
+  #results{display:block!important}
+  .overall-score,.score-card,.report-section,.action-plan,.comparison{opacity:1!important;break-inside:avoid}
+  .overall-score::before{background:#333!important}
+  .score-card::before{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .report-section{break-inside:avoid}
+  .section-body{max-height:none!important;padding:16px!important}
+  .results-header,.overall-score,.score-grid,.comparison,#reportSections,.action-plan{margin-bottom:16px}
+  *{transition:none!important;animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -239,11 +275,11 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 <!-- PASSWORD -->
 <div id="passwordScreen">
   <div class="pw-box">
-    <span class="pw-lock">🔒</span>
+    <span class="pw-lock">&#x1F512;</span>
     <div class="pw-title">Access Required</div>
     <div class="pw-sub">Enter your access code to continue</div>
-    <input type="password" class="pw-input" id="pwInput" placeholder="••••••••" maxlength="20" autocomplete="off">
-    <button class="pw-btn" onclick="checkPassword()">Unlock →</button>
+    <input type="password" class="pw-input" id="pwInput" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" maxlength="20" autocomplete="off">
+    <button class="pw-btn" onclick="checkPassword()">Unlock &#8594;</button>
     <div class="pw-error" id="pwError">Incorrect access code. Try again.</div>
   </div>
 </div>
@@ -267,15 +303,22 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     <label class="input-label">Enter your website URL</label>
     <div class="input-row">
       <input type="url" class="url-input" id="urlInput" placeholder="https://yourdomain.co.uk" autocomplete="off" spellcheck="false">
-      <button class="audit-btn" id="auditBtn" onclick="runAudit()">⚡ Run Audit</button>
+      <button class="audit-btn" id="auditBtn" onclick="runAudit()">&#9889; Run Audit</button>
+    </div>
+    <div class="competitor-section">
+      <label class="input-label" style="margin-top:20px">Compare against competitors (optional)</label>
+      <div class="comp-row">
+        <input type="url" class="url-input comp-input" id="comp1" placeholder="https://competitor-one.co.uk" autocomplete="off" spellcheck="false">
+        <input type="url" class="url-input comp-input" id="comp2" placeholder="https://competitor-two.co.uk" autocomplete="off" spellcheck="false">
+      </div>
     </div>
     <div class="checks">
-      <span class="check-item"><span class="check-icon">▸</span> AI Crawler Access</span>
-      <span class="check-item"><span class="check-icon">▸</span> Citation Readiness</span>
-      <span class="check-item"><span class="check-icon">▸</span> Schema Markup</span>
-      <span class="check-item"><span class="check-icon">▸</span> Brand Authority</span>
-      <span class="check-item"><span class="check-icon">▸</span> Content Quality</span>
-      <span class="check-item"><span class="check-icon">▸</span> Technical SEO</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> AI Crawler Access</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> Citation Readiness</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> Schema Markup</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> Brand Authority</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> Content Quality</span>
+      <span class="check-item"><span class="check-icon">&#9656;</span> Technical SEO</span>
     </div>
     <div class="error-msg" id="errorMsg"></div>
   </div>
@@ -284,42 +327,47 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     <div class="loading-state">
       <div class="loading-spinner"></div>
       <div class="loading-steps">
-        <div class="loading-step" id="step1"><span class="step-icon">🔍</span> Fetching website content...</div>
-        <div class="loading-step" id="step2"><span class="step-icon">🤖</span> Checking AI crawler access...</div>
-        <div class="loading-step" id="step3"><span class="step-icon">📊</span> Analysing citation readiness...</div>
-        <div class="loading-step" id="step4"><span class="step-icon">🏗️</span> Auditing schema markup...</div>
-        <div class="loading-step" id="step5"><span class="step-icon">✍️</span> Scoring content quality...</div>
-        <div class="loading-step" id="step6"><span class="step-icon">📋</span> Building action plan...</div>
+        <div class="loading-step" id="step1"><span class="step-icon">&#x1F50D;</span> Fetching website content...</div>
+        <div class="loading-step" id="step2"><span class="step-icon">&#x1F916;</span> Checking AI crawler access...</div>
+        <div class="loading-step" id="step3"><span class="step-icon">&#x1F4CA;</span> Analysing citation readiness...</div>
+        <div class="loading-step" id="step4"><span class="step-icon">&#x1F3D7;&#xFE0F;</span> Auditing schema markup...</div>
+        <div class="loading-step" id="step5"><span class="step-icon">&#x270D;&#xFE0F;</span> Scoring content quality...</div>
+        <div class="loading-step" id="step6"><span class="step-icon">&#x1F4CB;</span> Building action plan...</div>
       </div>
     </div>
   </div>
 
   <div id="results">
+    <div class="history-banner" id="historyBanner"></div>
     <div class="results-header">
       <span class="results-title">GEO Audit Report</span>
       <span class="audited-url" id="auditedUrl"></span>
     </div>
     <div class="overall-score" id="overallScore">
       <div class="overall-label">Overall GEO Score</div>
-      <div class="overall-number" id="scoreNumber">—</div>
+      <div class="overall-number" id="scoreNumber">&mdash;</div>
       <div class="overall-grade" id="scoreGrade"></div>
       <div class="overall-summary" id="scoreSummary"></div>
     </div>
     <div class="score-grid" id="scoreGrid"></div>
+    <div id="comparisonSection" style="display:none"></div>
     <div id="reportSections"></div>
     <div class="action-plan" id="actionPlan">
-      <div class="action-plan-title">⚡ Priority Action Plan</div>
+      <div class="action-plan-title">&#9889; Priority Action Plan</div>
       <div id="priorityItems"></div>
+    </div>
+    <div class="pdf-section" id="pdfSection" style="display:none;text-align:center;margin-top:24px">
+      <button class="audit-btn" onclick="window.print()" style="margin:0 auto">&#11015; Download PDF Report</button>
     </div>
     <div class="prompt-section" id="promptSection" style="display:none">
       <div class="prompt-label">Would you like the AI prompt to fix these issues?</div>
-      <button class="prompt-btn" onclick="showPrompt()">⚡ Get AI Fix Prompt</button>
+      <button class="prompt-btn" onclick="showPrompt()">&#9889; Get AI Fix Prompt</button>
     </div>
     <div class="email-section" id="emailSection" style="display:none">
       <div class="email-label">Get this report in your inbox</div>
       <div class="email-row">
         <input type="email" class="email-input" id="emailInput" placeholder="your@email.com" autocomplete="email">
-        <button class="email-btn" id="emailBtn" onclick="emailReport()">📧 Email Report</button>
+        <button class="email-btn" id="emailBtn" onclick="emailReport()">&#x1F4E7; Email Report</button>
       </div>
       <div class="email-status" id="emailStatus"></div>
     </div>
@@ -334,15 +382,15 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 <div class="prompt-overlay" id="promptOverlay" onclick="if(event.target===this)closePrompt()">
   <div class="prompt-modal">
     <div class="prompt-modal-header">
-      <div class="prompt-modal-title">⚡ AI Fix Prompt</div>
-      <button class="prompt-close" onclick="closePrompt()">✕</button>
+      <div class="prompt-modal-title">&#9889; AI Fix Prompt</div>
+      <button class="prompt-close" onclick="closePrompt()">&#10005;</button>
     </div>
     <div class="prompt-body">
       <div class="prompt-text" id="promptText"></div>
     </div>
     <div class="prompt-modal-footer">
       <div class="prompt-hint">Paste this into ChatGPT, Claude or any AI</div>
-      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">📋 Copy to Clipboard</button>
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">&#x1F4CB; Copy to Clipboard</button>
     </div>
   </div>
 </div>
@@ -468,6 +516,41 @@ function goSunny(){
   setTimeout(()=>document.body.classList.add('sunny'),1400);
 }
 
+// ── HISTORY ──────────────────────────────────────
+function getHistory(){
+  try{return JSON.parse(localStorage.getItem('geo_audit_history')||'[]');}catch(e){return[];}
+}
+function saveHistory(url,overall_score,scores){
+  const history=getHistory();
+  history.push({url:url,overall_score:overall_score,scores:scores,timestamp:Date.now()});
+  localStorage.setItem('geo_audit_history',JSON.stringify(history));
+}
+function findLastHistory(url){
+  const history=getHistory();
+  // find last entry for this url
+  for(let i=history.length-1;i>=0;i--){
+    if(history[i].url===url)return history[i];
+  }
+  return null;
+}
+function showHistoryBanner(url,currentScore){
+  const banner=document.getElementById('historyBanner');
+  const prev=findLastHistory(url);
+  if(!prev){banner.style.display='none';return;}
+  const date=new Date(prev.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const diff=currentScore-prev.overall_score;
+  let diffText='';
+  if(diff>0){
+    diffText=`You've <span class="improved">improved by ${diff} points</span>.`;
+  } else if(diff<0){
+    diffText=`You've <span class="declined">declined by ${Math.abs(diff)} points</span>.`;
+  } else {
+    diffText='Score unchanged.';
+  }
+  banner.innerHTML=`Last audited ${date} — score was ${prev.overall_score}. ${diffText}`;
+  banner.style.display='block';
+}
+
 // ── AUDIT ─────────────────────────────────────────
 const SYS=`You are a world-class GEO (Generative Engine Optimisation) auditor. Analyse websites for visibility in AI-powered search engines like ChatGPT, Claude, Perplexity, and Google AI Overviews.
 
@@ -483,6 +566,41 @@ Return ONLY a valid JSON object — no markdown fences, no explanation:
 
 Sections: "AI Crawler Access", "Citation Readiness", "Schema & Structured Data", "Brand Authority Signals", "Content Quality & E-E-A-T", "Technical SEO Foundations". Give 5-8 priorities ordered by impact. Be specific, honest, actionable.`;
 
+async function callAudit(url){
+  const res=await fetch('https://us-central1-bergason-block-management.cloudfunctions.net/geoAuditProxy',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:4000,
+      system:SYS,
+      messages:[{role:'user',content:`You are auditing the site at ${url}. Run a comprehensive GEO audit. Return only the JSON.`}]
+    })
+  });
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API failed');}
+  const data=await res.json();
+  const text=data.content[0].text;
+  return JSON.parse(text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());
+}
+
+function generateTestMock(variant){
+  // variant 0 = main, 1 = comp1, 2 = comp2
+  const bases=[
+    {overall_score:47,grade:'C',ai:52,cit:58,sch:22,brand:41,content:65,tech:44},
+    {overall_score:62,grade:'B',ai:70,cit:55,sch:48,brand:65,content:72,tech:50},
+    {overall_score:35,grade:'D',ai:30,cit:42,sch:15,brand:28,content:50,tech:38}
+  ];
+  const b=bases[variant]||bases[0];
+  return {
+    overall_score:b.overall_score,
+    grade:b.grade,
+    summary:variant===0?'This site has moderate GEO visibility with significant room for improvement. Key gaps in schema markup and AI crawler access are limiting discoverability.':variant===1?'A solid foundation with good crawler access and content quality. Schema and brand authority could be strengthened further.':'This site has poor GEO visibility with critical gaps across most categories. Urgent action needed on schema, crawlers and brand signals.',
+    scores:{ai_crawler_access:b.ai,citation_readiness:b.cit,schema_markup:b.sch,brand_authority:b.brand,content_quality:b.content,technical_seo:b.tech},
+    sections:[{title:'AI Crawler Access',icon:'\u{1F916}',status:b.ai>=60?'good':'fair',findings:[{type:b.ai>=60?'pass':'warn',title:'Robots.txt configuration',description:b.ai>=60?'Robots.txt properly configured with AI crawler directives.':'AI crawlers have no guidance on what to index.',action:b.ai>=60?null:'Create robots.txt with Allow: / and Sitemap directive'},{type:b.ai>=50?'warn':'fail',title:'llms.txt file',description:b.ai>=50?'Basic llms.txt exists but lacks detail.':'No AI-readable content summary exists for LLM crawlers.',action:'Create or improve llms.txt with business info and page structure'}]},{title:'Citation Readiness',icon:'\u{1F4DD}',status:b.cit>=60?'good':'fair',findings:[{type:'pass',title:'Clear service descriptions',description:'Services are described with specific detail that AI models can extract.'},{type:'warn',title:'FAQ sections',description:b.cit>=55?'Limited FAQ content exists.':'No question-answer format content exists.',action:'Add FAQ sections with question-based H2 headings'}]},{title:'Schema & Structured Data',icon:'\u{1F3D7}\u{FE0F}',status:b.sch>=40?'fair':'poor',findings:[{type:b.sch>=40?'warn':'fail',title:'JSON-LD markup',description:b.sch>=40?'Basic Organization schema found but incomplete.':'Zero structured data on any page.',action:'Add Organization, LocalBusiness, and Service schemas'}]},{title:'Brand Authority Signals',icon:'\u{1F3E2}',status:b.brand>=60?'good':'fair',findings:[{type:b.brand>=60?'pass':'warn',title:'External presence',description:b.brand>=60?'Good presence on review platforms.':'Limited third-party review presence detected.',action:b.brand>=60?null:'Claim Google Business Profile and Trustpilot'}]},{title:'Content Quality & E-E-A-T',icon:'\u{270D}\u{FE0F}',status:b.content>=60?'good':'fair',findings:[{type:b.content>=60?'pass':'warn',title:'Content depth',description:b.content>=60?'Good informational content with clear expertise signals.':'Content is thin and lacks expertise signals.',action:b.content>=60?null:'Add detailed, expert-level content'}]},{title:'Technical SEO Foundations',icon:'\u{2699}\u{FE0F}',status:b.tech>=50?'fair':'poor',findings:[{type:b.tech>=50?'warn':'fail',title:'Sitemap and meta',description:b.tech>=50?'Sitemap exists but meta descriptions are inconsistent.':'No sitemap.xml and missing meta descriptions.',action:'Create sitemap.xml and add unique meta descriptions'}]}],
+    priorities:[{title:'Add structured data (JSON-LD)',description:'Add Organization, LocalBusiness, Service, and Review schemas.',impact:'high'},{title:'Create robots.txt and sitemap.xml',description:'Two files that unlock crawler guidance and page discovery.',impact:'high'},{title:'Add meta descriptions to all pages',description:'Controls how every search engine and AI summarises the site.',impact:'high'},{title:'Create llms.txt',description:'AI-readable business summary file.',impact:'medium'},{title:'Add FAQ sections',description:'AI models preferentially cite Q&A content.',impact:'medium'}]
+  };
+}
+
 async function runAudit(){
   const url=document.getElementById('urlInput').value.trim();
   const err=document.getElementById('errorMsg');
@@ -491,6 +609,9 @@ async function runAudit(){
   let cu=url;
   if(!cu.startsWith('http'))cu='https://'+cu;
   try{new URL(cu)}catch(e){showError('Please enter a valid URL');return;}
+
+  const comp1Val=document.getElementById('comp1').value.trim();
+  const comp2Val=document.getElementById('comp2').value.trim();
 
   document.getElementById('auditBtn').disabled=true;
   document.getElementById('results').style.display='none';
@@ -517,26 +638,31 @@ async function runAudit(){
 
   try{
     let audit;
+    let compResults=[];
     const isTest=cu.includes('test.com')||cu.includes('demo.com')||cu.includes('example.com');
     if(isTest){
       await new Promise(r=>setTimeout(r,9500));
-      audit={overall_score:47,grade:'C',summary:'This site has moderate GEO visibility with significant room for improvement. Key gaps in schema markup and AI crawler access are limiting discoverability.',scores:{ai_crawler_access:52,citation_readiness:58,schema_markup:22,brand_authority:41,content_quality:65,technical_seo:44},sections:[{title:'AI Crawler Access',icon:'🤖',status:'fair',findings:[{type:'warn',title:'No robots.txt file found',description:'AI crawlers have no guidance on what to index. Default allow is assumed but no sitemap directive exists.',action:'Create robots.txt with Allow: / and Sitemap directive'},{type:'fail',title:'No llms.txt file',description:'No AI-readable content summary exists for LLM crawlers.',action:'Create llms.txt with business info and page structure'},{type:'pass',title:'Static HTML delivery',description:'Content is server-rendered and fully visible to all crawlers without JavaScript execution.'}]},{title:'Citation Readiness',icon:'📝',status:'good',findings:[{type:'pass',title:'Clear service descriptions',description:'Services are well-described with specific detail that AI models can extract and cite.'},{type:'warn',title:'No FAQ sections',description:'No question-answer format content exists. AI models prefer Q&A structure for citation.',action:'Add FAQ sections with question-based H2 headings'},{type:'warn',title:'Marketing-heavy copy',description:'Most content is promotional rather than informational. AI systems cite factual content more readily.',action:'Add factual, data-driven content blocks'}]},{title:'Schema & Structured Data',icon:'🏗️',status:'poor',findings:[{type:'fail',title:'No JSON-LD markup detected',description:'Zero structured data on any page. Search engines and AI cannot parse entity information.',action:'Add Organization, LocalBusiness, and Service schemas'},{type:'fail',title:'No review markup',description:'Testimonials exist but have no Review schema for rich results.',action:'Add Review and AggregateRating schema'},{type:'info',title:'No Open Graph tags',description:'Social sharing will show generic previews.'}]},{title:'Brand Authority Signals',icon:'🏢',status:'fair',findings:[{type:'warn',title:'No Wikidata entry',description:'Business has no structured entity in Wikidata. AI models use this for entity recognition.',action:'Create Wikidata entry with company details'},{type:'warn',title:'No external review platforms',description:'No Trustpilot, Google Reviews, or other third-party review presence detected.',action:'Claim Google Business Profile and Trustpilot'},{type:'pass',title:'Professional memberships displayed',description:'Industry credentials are visible on the site.'}]},{title:'Content Quality & E-E-A-T',icon:'✍️',status:'good',findings:[{type:'pass',title:'Transparent pricing',description:'Pricing information is clearly displayed — a strong trust signal.'},{type:'warn',title:'No named team members',description:'No author bios, team page, or named individuals. Undermines expertise signals.',action:'Add team page with names, qualifications and photos'},{type:'warn',title:'Content freshness unknown',description:'No publication or update dates visible on any content.',action:'Add lastReviewed dates to all pages'}]},{title:'Technical SEO Foundations',icon:'⚙️',status:'fair',findings:[{type:'fail',title:'No sitemap.xml',description:'Search engines cannot efficiently discover pages.',action:'Create sitemap.xml listing all pages'},{type:'fail',title:'No meta descriptions',description:'All pages missing meta descriptions. Search engines auto-generate poor snippets.',action:'Add unique meta descriptions to every page'},{type:'pass',title:'HTTPS enabled',description:'Site loads over HTTPS with proper redirects.'},{type:'warn',title:'Single-page architecture',description:'Most content on one URL limits AI citation of specific topics.',action:'Expand to dedicated service pages'}]}],priorities:[{title:'Add structured data (JSON-LD)',description:'Add Organization, LocalBusiness, Service, and Review schemas. This is the single highest-impact fix for AI visibility.',impact:'high'},{title:'Create robots.txt and sitemap.xml',description:'Two files that unlock crawler guidance and page discovery. Takes 15 minutes.',impact:'high'},{title:'Add meta descriptions to all pages',description:'Controls how every search engine and AI summarises the site. Write unique 150-160 char descriptions.',impact:'high'},{title:'Create llms.txt',description:'AI-readable business summary file. Emerging standard for GEO optimisation.',impact:'medium'},{title:'Add FAQ sections with Q&A format',description:'AI models preferentially cite content structured as direct answers to questions.',impact:'medium'},{title:'Create team page with named directors',description:'Addresses the biggest E-E-A-T gap — anonymous businesses score poorly on expertise.',impact:'medium'},{title:'Claim Google Business Profile',description:'Free and feeds directly into Google Gemini and AI Overviews entity recognition.',impact:'medium'},{title:'Create Wikidata entry',description:'Highest-leverage action for entity recognition across ChatGPT, Perplexity and Gemini.',impact:'high'}]};
+      audit=generateTestMock(0);
+      // Handle competitor mocks
+      const compUrls=[];
+      if(comp1Val)compUrls.push(comp1Val);
+      if(comp2Val)compUrls.push(comp2Val);
+      for(let ci=0;ci<compUrls.length;ci++){
+        let cUrl=compUrls[ci];
+        if(!cUrl.startsWith('http'))cUrl='https://'+cUrl;
+        compResults.push({url:cUrl,data:generateTestMock(ci+1)});
+      }
     } else {
-    const res=await fetch('https://us-central1-bergason-block-management.cloudfunctions.net/geoAuditProxy',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:4000,
-        system:SYS,
-        messages:[{role:'user',content:`Run a comprehensive GEO audit on: ${cu}\n\nReturn only the JSON.`}]
-      })
-    });
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'API failed');}
-    const data=await res.json();
-    const text=data.content[0].text;
-    try{audit=JSON.parse(text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim());}
-    catch(e){throw new Error('Could not parse results. Please try again.');}
+      // Main audit
+      audit=await callAudit(cu);
+      // Competitor audits in parallel
+      const compUrls=[];
+      if(comp1Val){let c=comp1Val;if(!c.startsWith('http'))c='https://'+c;compUrls.push(c);}
+      if(comp2Val){let c=comp2Val;if(!c.startsWith('http'))c='https://'+c;compUrls.push(c);}
+      if(compUrls.length>0){
+        const compPromises=compUrls.map(u=>callAudit(u).then(d=>({url:u,data:d})).catch(e=>({url:u,data:null,error:e.message})));
+        compResults=await Promise.all(compPromises);
+      }
     }
 
     setTimeout(()=>document.getElementById(steps[steps.length-1]).classList.add('done'),100);
@@ -544,7 +670,15 @@ async function runAudit(){
 
     document.getElementById('loadingState').style.display='none';
     steps.forEach(id=>document.getElementById(id).classList.remove('active','done'));
+
+    // Show history banner before rendering
+    showHistoryBanner(cu,audit.overall_score);
+
+    // Save to history
+    saveHistory(cu,audit.overall_score,audit.scores);
+
     renderResults(audit,cu);
+    renderComparison(cu,audit,compResults);
     document.getElementById('auditBtn').disabled=false;
     setTimeout(goSunny,500);
 
@@ -565,6 +699,44 @@ function showError(msg){
 function sc(s){return s>=80?'excellent':s>=60?'good':s>=40?'fair':'poor';}
 function sb(st){return{excellent:{cls:'badge-green',label:'Excellent'},good:{cls:'badge-purple',label:'Good'},fair:{cls:'badge-amber',label:'Needs Work'},poor:{cls:'badge-red',label:'Critical'}}[st]||{cls:'badge-amber',label:'Needs Work'};}
 function ic(t){return{pass:'ind-green',warn:'ind-amber',fail:'ind-red',info:'ind-blue'}[t]||'ind-blue';}
+function scoreColor(s){return s>=80?'var(--green)':s>=60?'#dce6ff':s>=40?'var(--amber)':'var(--red)';}
+
+function renderComparison(mainUrl,mainData,compResults){
+  const section=document.getElementById('comparisonSection');
+  // Filter out failed competitor results
+  const validComps=compResults.filter(c=>c.data);
+  if(validComps.length===0){section.style.display='none';return;}
+
+  const allSites=[{url:mainUrl,data:mainData},...validComps];
+  const highestScore=Math.max(...allSites.map(s=>s.data.overall_score));
+
+  const sl={ai_crawler_access:'AI Crawlers',citation_readiness:'Citation',schema_markup:'Schema',brand_authority:'Brand',content_quality:'Content',technical_seo:'Tech SEO'};
+
+  let cardsHtml='';
+  allSites.forEach(site=>{
+    let hostname;
+    try{hostname=new URL(site.url).hostname;}catch(e){hostname=site.url;}
+    const s=site.data.overall_score;
+    const isWinner=s===highestScore;
+    const color=scoreColor(s);
+    let subsHtml='';
+    Object.entries(site.data.scores||{}).forEach(([k,v])=>{
+      subsHtml+=`<div class="comp-sub"><span>${sl[k]||k}</span><span class="comp-sub-val" style="color:${scoreColor(v)}">${v}</span></div>`;
+    });
+    cardsHtml+=`<div class="comp-card${isWinner?' winner':''}">
+      <div class="comp-hostname">${hostname}</div>
+      <div class="comp-score" style="color:${color}">${s}</div>
+      <div class="comp-bar"><div class="comp-bar-fill" style="width:${s}%;background:${color}"></div></div>
+      <div class="comp-sub-scores">${subsHtml}</div>
+    </div>`;
+  });
+
+  section.innerHTML=`<div class="comparison">
+    <div class="comparison-title">Competitor Comparison</div>
+    <div class="comparison-grid">${cardsHtml}</div>
+  </div>`;
+  section.style.display='block';
+}
 
 function renderResults(data,url){
   lastAuditData=data;
@@ -594,8 +766,8 @@ function renderResults(data,url){
     const b=sb(s.status);
     const el=document.createElement('div');
     el.className='report-section';
-    const fh=(s.findings||[]).map(f=>`<div class="content-item"><div class="item-indicator ${ic(f.type)}"></div><div class="item-content"><div class="item-title">${f.title}</div><div class="item-desc">${f.description}</div>${f.action?`<div class="item-action">↗ ${f.action}</div>`:''}</div></div>`).join('');
-    el.innerHTML=`<div class="section-header" onclick="ts(this)"><div class="section-title"><span class="section-icon">${s.icon||'📋'}</span>${s.title}</div><div style="display:flex;align-items:center;gap:10px"><span class="section-badge ${b.cls}">${b.label}</span><span class="section-toggle">▾</span></div></div><div class="section-body">${fh}</div>`;
+    const fh=(s.findings||[]).map(f=>`<div class="content-item"><div class="item-indicator ${ic(f.type)}"></div><div class="item-content"><div class="item-title">${f.title}</div><div class="item-desc">${f.description}</div>${f.action?`<div class="item-action">\u2197 ${f.action}</div>`:''}</div></div>`).join('');
+    el.innerHTML=`<div class="section-header" onclick="ts(this)"><div class="section-title"><span class="section-icon">${s.icon||'\u{1F4CB}'}</span>${s.title}</div><div style="display:flex;align-items:center;gap:10px"><span class="section-badge ${b.cls}">${b.label}</span><span class="section-toggle">\u25BE</span></div></div><div class="section-body">${fh}</div>`;
     se.appendChild(el);
     setTimeout(()=>el.classList.add('visible'),i*80+400);
     if(i<2)setTimeout(()=>ts(el.querySelector('.section-header')),i*80+650);
@@ -612,6 +784,7 @@ function renderResults(data,url){
   document.getElementById('results').style.display='block';
   document.getElementById('promptSection').style.display='block';
   document.getElementById('emailSection').style.display='block';
+  document.getElementById('pdfSection').style.display='block';
   setTimeout(()=>{
     document.getElementById('overallScore').classList.add('visible');
     document.getElementById('actionPlan').classList.add('visible');
@@ -665,7 +838,7 @@ function showPrompt(){
   if(!p)return;
   document.getElementById('promptText').textContent=p;
   document.getElementById('promptOverlay').classList.add('open');
-  document.getElementById('copyBtn').textContent='📋 Copy to Clipboard';
+  document.getElementById('copyBtn').textContent='\u{1F4CB} Copy to Clipboard';
   document.getElementById('copyBtn').classList.remove('copied');
 }
 
@@ -677,9 +850,9 @@ function copyPrompt(){
   const p=buildPrompt();
   navigator.clipboard.writeText(p).then(()=>{
     const btn=document.getElementById('copyBtn');
-    btn.textContent='✓ Copied!';
+    btn.textContent='\u2713 Copied!';
     btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='📋 Copy to Clipboard';btn.classList.remove('copied');},2500);
+    setTimeout(()=>{btn.textContent='\u{1F4CB} Copy to Clipboard';btn.classList.remove('copied');},2500);
   });
 }
 document.getElementById('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')emailReport();});
@@ -729,7 +902,7 @@ async function emailReport(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         key:'bergason-quick-email-2026',
-        subject:`GEO Audit Report — ${lastAuditUrl} (${d.overall_score}/100)`,
+        subject:`GEO Audit Report \u2014 ${lastAuditUrl} (${d.overall_score}/100)`,
         body:body,
         to:email
       })
@@ -745,7 +918,7 @@ async function emailReport(){
     status.textContent='Failed to send: '+e.message;
     status.className='email-status show error';
   }
-  btn.disabled=false;btn.textContent='📧 Email Report';
+  btn.disabled=false;btn.textContent='\u{1F4E7} Email Report';
 }
 </script>
 </body>
