@@ -57,7 +57,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .pw-shake{animation:shake .4s ease}
 
 /* Main */
-.container{width:100%;max-width:960px;padding:60px 24px 80px;position:relative;z-index:10}
+.container{width:100%;max-width:1060px;padding:60px 24px 80px;position:relative;z-index:10}
 .user-info{display:flex;gap:12px;margin-bottom:20px}
 .user-info-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-family:var(--mono);font-size:16px;color:var(--text);outline:none;transition:all .2s}
 .user-info-input::placeholder{color:var(--muted)}
@@ -123,7 +123,7 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .score-label{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;transition:color 2.5s ease}
 .report-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,background 2.5s ease,border-color 2.5s ease}
 .report-section.visible{opacity:1;transform:translateY(0)}
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:border-color 2.5s ease}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:border-color 2.5s ease}
 .section-header:hover{background:rgba(255,255,255,.02)}
 .section-title{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-size:20px;font-weight:600;color:var(--text);transition:color 2.5s ease}
 .section-icon{font-size:16px}
@@ -135,8 +135,8 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .section-toggle{font-size:12px;color:var(--muted);transition:transform .2s}
 .section-toggle.open{transform:rotate(180deg)}
 .section-body{padding:0;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
-.section-body.open{max-height:2000px;padding:24px}
-.content-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:border-color 2.5s ease}
+.section-body.open{max-height:2000px;padding:28px}
+.content-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:border-color 2.5s ease}
 .content-item:last-child{border-bottom:none;padding-bottom:0}
 .content-item:first-child{padding-top:0}
 .item-indicator{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
@@ -145,21 +145,21 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 .item-title{font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;transition:color 2.5s ease}
 .item-desc{font-family:var(--mono);font-size:15px;color:var(--muted);line-height:1.7;transition:color 2.5s ease}
 .item-action{font-family:var(--mono);font-size:15px;color:var(--accent2);margin-top:6px;padding:5px 12px;background:rgba(249,115,22,.08);border-radius:6px;display:inline-block;border:1px solid rgba(249,115,22,.15)}
-.overall-score{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;opacity:0;transition:opacity .6s,background 2.5s ease,border-color 2.5s ease}
+.overall-score{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;opacity:0;transition:opacity .6s,background 2.5s ease,border-color 2.5s ease}
 .overall-score.visible{opacity:1}
 .overall-score::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#fff,var(--accent2));transition:background 2.5s ease}
 .overall-label{font-family:var(--mono);font-size:16px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;transition:color 2.5s ease}
-.overall-number{font-family:var(--serif);font-size:96px;font-weight:400;line-height:1;margin-bottom:8px}
+.overall-number{font-family:var(--serif);font-size:110px;font-weight:400;line-height:1;margin-bottom:8px}
 .overall-grade{font-family:var(--sans);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:6px 20px;border-radius:100px;display:inline-block;margin-bottom:16px}
 .grade-a{background:rgba(34,197,94,.15);color:var(--green)}
 .grade-b{background:rgba(255,255,255,.1);color:#dce6ff}
 .grade-c{background:rgba(245,158,11,.15);color:var(--amber)}
 .grade-d{background:rgba(239,68,68,.15);color:var(--red)}
-.overall-summary{font-family:var(--mono);font-size:16px;color:var(--muted);max-width:540px;margin:0 auto;line-height:1.7;transition:color 2.5s ease}
-.action-plan{background:var(--surface);border:1px solid rgba(249,115,22,.2);border-radius:16px;padding:28px;margin-top:16px;opacity:0;transition:opacity .6s,background 2.5s ease}
+.overall-summary{font-family:var(--mono);font-size:17px;color:var(--muted);max-width:540px;margin:0 auto;line-height:1.7;transition:color 2.5s ease}
+.action-plan{background:var(--surface);border:1px solid rgba(249,115,22,.2);border-radius:16px;padding:32px;margin-top:16px;opacity:0;transition:opacity .6s,background 2.5s ease}
 .action-plan.visible{opacity:1}
 .action-plan-title{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-.priority-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:border-color 2.5s ease}
+.priority-item{display:flex;gap:18px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:border-color 2.5s ease}
 .priority-item:last-child{border-bottom:none}
 .priority-num{width:28px;height:28px;border-radius:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--accent2);flex-shrink:0}
 .priority-content{flex:1}
@@ -248,15 +248,15 @@ body.sunny .url-input::placeholder{color:#a8a29e}
 body.sunny .check-icon{color:#d97706}
 body.sunny .input-section::before{background:linear-gradient(90deg,transparent,rgba(217,119,6,.4),transparent)}
 
-@media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:72px}}
+@media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:80px}.user-info{flex-direction:column}}
 
 /* Score bars */
 .score-bars{margin-bottom:24px}
-.bar-row{margin-bottom:16px}
-.bar-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:14px;margin-bottom:8px}
+.bar-row{margin-bottom:18px}
+.bar-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:16px;margin-bottom:8px}
 .bar-name{color:var(--muted)}
 .bar-val{font-weight:600}
-.bar-track{height:10px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;position:relative}
+.bar-track{height:12px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;position:relative}
 .bar-fill{height:100%;border-radius:5px;position:relative;width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
 .bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(255,255,255,.2));border-radius:5px}
 .bar-fill.green{background:linear-gradient(90deg,#16a34a,#22c55e);box-shadow:0 0 12px rgba(34,197,94,.3)}
@@ -269,7 +269,7 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 .platform-section-title{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px;text-align:center}
 .platform-row{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
 .platform{text-align:center}
-.platform-ring{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.platform-ring{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 .platform-ring.ready{background:rgba(34,197,94,.1);border:2px solid rgba(34,197,94,.4);box-shadow:0 0 16px rgba(34,197,94,.2),inset 0 0 12px rgba(34,197,94,.1)}
 .platform-ring.partial{background:rgba(245,158,11,.1);border:2px solid rgba(245,158,11,.4);box-shadow:0 0 16px rgba(245,158,11,.2),inset 0 0 12px rgba(245,158,11,.1)}
 .platform-ring.blocked{background:rgba(239,68,68,.1);border:2px solid rgba(239,68,68,.4);box-shadow:0 0 16px rgba(239,68,68,.2),inset 0 0 12px rgba(239,68,68,.1)}
@@ -277,8 +277,8 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 .platform-ring.ready .platform-dot{background:#22c55e;box-shadow:0 0 8px #22c55e}
 .platform-ring.partial .platform-dot{background:#f59e0b;box-shadow:0 0 8px #f59e0b}
 .platform-ring.blocked .platform-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
-.platform-name{font-family:var(--mono);font-size:13px;color:var(--muted)}
-.platform-status{font-family:var(--mono);font-size:11px;margin-top:2px}
+.platform-name{font-family:var(--mono);font-size:15px;color:var(--muted)}
+.platform-status{font-family:var(--mono);font-size:13px;margin-top:2px}
 .platform-status.s-ready{color:var(--green)}
 .platform-status.s-partial{color:var(--amber)}
 .platform-status.s-blocked{color:var(--red)}
@@ -287,11 +287,11 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 .donut-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;text-align:center;opacity:0;transition:opacity .6s}
 .donut-section.visible{opacity:1}
 .donut-section-title{font-family:var(--mono);font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
-.donut-wrap{position:relative;width:180px;height:180px;margin:0 auto}
+.donut-wrap{position:relative;width:200px;height:200px;margin:0 auto}
 .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.donut-num{font-family:var(--serif);font-size:40px;color:var(--text);line-height:1}
+.donut-num{font-family:var(--serif);font-size:46px;color:var(--text);line-height:1}
 .donut-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.donut-legend{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:center;margin-top:20px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.donut-legend{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:center;margin-top:20px;font-family:var(--mono);font-size:15px;color:var(--muted)}
 .donut-legend span{display:flex;align-items:center;gap:6px}
 .legend-dot{width:10px;height:10px;border-radius:50%}
 
@@ -340,7 +340,7 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     <span class="pw-lock">&#x1F512;</span>
     <div class="pw-title">Access Required</div>
     <div class="pw-sub">Enter your access code to continue</div>
-    <input type="text" class="pw-input" id="pwInput" placeholder="Enter access code" maxlength="20" autocomplete="off">
+    <input type="password" class="pw-input" id="pwInput" placeholder="Enter access code" maxlength="20" autocomplete="off">
     <button class="pw-btn" onclick="checkPassword()">Unlock &#8594;</button>
     <div class="pw-error" id="pwError">Incorrect access code. Try again.</div>
   </div>
@@ -844,7 +844,7 @@ function renderResults(data,url){
   }
   document.getElementById('pdfPersonalisation').innerHTML=pLabel;
   const sn=document.getElementById('scoreNumber');
-  sn.textContent=data.overall_score;
+  sn.innerHTML=data.overall_score+'<span style="font-size:32px;color:var(--muted);font-family:var(--mono);font-weight:400"> / 100</span>';
   sn.style.color=data.overall_score>=80?'var(--green)':data.overall_score>=60?'var(--accent)':data.overall_score>=40?'var(--amber)':'var(--red)';
   const ge=document.getElementById('scoreGrade');
   ge.textContent='Grade '+data.grade;
