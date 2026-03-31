@@ -93,7 +93,7 @@ body.sunny .subtitle{color:#1c1117;text-shadow:none}
 
 /* Loading */
 #loadingState{display:none}
-.loading-state{text-align:center;padding:60px 24px}
+.loading-state{text-align:center;padding:24px 24px}
 .loading-spinner{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 24px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-steps{display:flex;flex-direction:row;flex-wrap:wrap;gap:10px 16px;max-width:680px;margin:0 auto;justify-content:center}
@@ -252,7 +252,7 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
 
 /* Print stylesheet */
 @media print{
-  #passwordScreen,.bg-grid,.bg-glow,.sky-overlay,.sun,.sun-rays,.lightning-container,.storm-cloud,.input-section,#loadingState,.prompt-section,.email-section,.pdf-section,footer,.prompt-overlay,.history-banner{display:none!important}
+  #passwordScreen,.bg-grid,.bg-glow,.sky-overlay,.sun,.sun-rays,.lightning-container,.storm-cloud,.input-section,#loadingState,.prompt-section,.email-section,footer,.prompt-overlay,.history-banner{display:none!important}
   body,body.sunny{background:#fff!important;color:#000!important}
   .container{max-width:100%;padding:0}
   #results{display:block!important}
@@ -287,7 +287,7 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     <span class="pw-lock">&#x1F512;</span>
     <div class="pw-title">Access Required</div>
     <div class="pw-sub">Enter your access code to continue</div>
-    <input type="password" class="pw-input" id="pwInput" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" maxlength="20" autocomplete="off">
+    <input type="text" class="pw-input" id="pwInput" placeholder="Enter access code" maxlength="20" autocomplete="off">
     <button class="pw-btn" onclick="checkPassword()">Unlock &#8594;</button>
     <div class="pw-error" id="pwError">Incorrect access code. Try again.</div>
   </div>
@@ -316,14 +316,14 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     </div>
     <label class="input-label">Enter your website URL</label>
     <div class="input-row">
-      <input type="url" class="url-input" id="urlInput" placeholder="https://yourdomain.co.uk" autocomplete="off" spellcheck="false">
+      <input type="url" class="url-input" id="urlInput" placeholder="www.yourdomain.co.uk" autocomplete="off" spellcheck="false">
       <button class="audit-btn" id="auditBtn" onclick="runAudit()">&#9889; Run Audit</button>
     </div>
     <div class="competitor-section">
       <label class="input-label" style="margin-top:20px">Compare against competitors (optional)</label>
       <div class="comp-row">
-        <input type="url" class="url-input comp-input" id="comp1" placeholder="https://competitor-one.co.uk" autocomplete="off" spellcheck="false">
-        <input type="url" class="url-input comp-input" id="comp2" placeholder="https://competitor-two.co.uk" autocomplete="off" spellcheck="false">
+        <input type="url" class="url-input comp-input" id="comp1" placeholder="www.competitor-one.co.uk" autocomplete="off" spellcheck="false">
+        <input type="url" class="url-input comp-input" id="comp2" placeholder="www.competitor-two.co.uk" autocomplete="off" spellcheck="false">
       </div>
     </div>
     <div class="checks">
@@ -370,9 +370,6 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
       <div class="action-plan-title">&#9889; Priority Action Plan</div>
       <div id="priorityItems"></div>
     </div>
-    <div class="pdf-section" id="pdfSection" style="display:none;text-align:center;margin-top:24px">
-      <button class="audit-btn" onclick="downloadPDF()" style="margin:0 auto">&#11015; Download PDF Report</button>
-    </div>
     <div class="prompt-section" id="promptSection" style="display:none">
       <div class="prompt-label">Would you like the AI prompt to fix these issues?</div>
       <button class="prompt-btn" onclick="showPrompt()">&#9889; Get AI Fix Prompt</button>
@@ -380,7 +377,7 @@ body.sunny .input-section::before{background:linear-gradient(90deg,transparent,r
     <div class="email-section" id="emailSection" style="display:none">
       <div class="email-label">Get this report in your inbox</div>
       <div class="email-row">
-        <input type="email" class="email-input" id="emailInput" placeholder="name@company.co.uk" autocomplete="email">
+        <input type="email" class="email-input" id="emailInput" placeholder="you@yourcompany.co.uk" autocomplete="email">
         <button class="email-btn" id="emailBtn" onclick="emailReport()">&#x1F4E7; Email Report</button>
       </div>
       <div class="email-status" id="emailStatus"></div>
@@ -819,7 +816,6 @@ function renderResults(data,url){
   document.getElementById('results').style.display='block';
   document.getElementById('promptSection').style.display='block';
   document.getElementById('emailSection').style.display='block';
-  document.getElementById('pdfSection').style.display='block';
   setTimeout(()=>{
     document.getElementById('overallScore').classList.add('visible');
     document.getElementById('actionPlan').classList.add('visible');
@@ -891,22 +887,6 @@ function copyPrompt(){
     btn.classList.add('copied');
     setTimeout(()=>{btn.textContent='\u{1F4CB} Copy to Clipboard';btn.classList.remove('copied');},2500);
   });
-}
-function downloadPDF(){
-  const name=document.getElementById('userName').value.trim();
-  const company=document.getElementById('userCompany').value.trim();
-  const pdfTitle=document.getElementById('pdfPersonalisation');
-  if(pdfTitle){
-    let label='GEO Audit Report';
-    if(name||company){
-      label='GEO Audit Report — Prepared for';
-      if(name)label+=' <span class="print-name" style="color:var(--accent2)">'+name+'</span>';
-      if(name&&company)label+=' at';
-      if(company)label+=' <span class="print-name" style="color:var(--accent2)">'+company+'</span>';
-    }
-    pdfTitle.innerHTML=label;
-  }
-  window.print();
 }
 
 document.getElementById('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')emailReport();});
