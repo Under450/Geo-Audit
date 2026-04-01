@@ -401,7 +401,7 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
     <span class="pw-lock">&#x1F512;</span>
     <div class="pw-title">Access Required</div>
     <div class="pw-sub">Enter your access code to continue</div>
-    <input type="password" class="pw-input" id="pwInput" placeholder="Enter access code" maxlength="20" autocomplete="off">
+    <input type="text" class="pw-input" id="pwInput" placeholder="" maxlength="20" autocomplete="off" style="-webkit-text-security:disc">
     <button class="pw-btn" onclick="checkPassword()">Unlock &#8594;</button>
     <div class="pw-error" id="pwError">Incorrect access code. Try again.</div>
   </div>
