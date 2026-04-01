@@ -312,8 +312,9 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 /* ═══════════════════════════════════════════
    ROBOT — now free-floating and animated
 ═══════════════════════════════════════════ */
-#robotMascot{position:fixed;z-index:500;pointer-events:none;top:33%;left:30px;opacity:0;animation:robotEnter 1s ease-out 0.5s forwards}
-#robotMascot.flying{animation:robotFly 22s ease-in-out infinite}
+#robotMascot{position:fixed;z-index:500;pointer-events:none;top:33%;left:30px;opacity:0}
+#robotMascot.visible{opacity:1;transition:opacity .5s}
+#robotMascot.flying{opacity:1;animation:robotFly 22s ease-in-out infinite}
 @keyframes robotEnter{from{left:-120px;opacity:0}to{left:30px;opacity:1}}
 @keyframes robotFly{
   0%{top:33%;left:30px;transform:scale(0.9) rotate(-2deg)}
@@ -596,8 +597,9 @@ function checkPassword(){
       box.classList.add('pw-shake');
       setTimeout(()=>box.classList.remove('pw-shake'),400);
       document.getElementById('pwInput').value='';
-      // Show password screen but reveal robot with message
+      // Show robot with expired message
       setTimeout(()=>{
+        robotEl.classList.add('visible');
         showBubble('Your code has expired! Contact Craig for more access.',8000);
       },600);
       return;
@@ -624,8 +626,10 @@ function unlockSite(){
   const s=document.getElementById('passwordScreen');
   s.classList.add('fade-out');
   setTimeout(()=>s.style.display='none',900);
-  setTimeout(()=>showBubble('What are you waiting for?',4000),1800);
-  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},6500);
+  // Make robot visible immediately
+  setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},1500);
+  // Start flying and idle chatter after bubble
+  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},6000);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
