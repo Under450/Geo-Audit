@@ -625,7 +625,7 @@ function unlockSite(){
   s.classList.add('fade-out');
   setTimeout(()=>s.style.display='none',900);
   setTimeout(()=>showBubble('What are you waiting for?',4000),1800);
-  setTimeout(()=>{bubble.classList.remove('show');robotEl.classList.add('flying');},6500);
+  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},6500);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
@@ -667,16 +667,73 @@ function robotResetPosition() {
 }
 
 const LOADING_QUIPS = [
-  'Scanning your site... 👀',
+  'Scanning your site...',
   'Checking crawler access...',
   'Reading your content...',
   'Counting schema tags...',
-  'Analysing authority...',
-  'Almost there... ⚡'
+  'Analysing authority signals...',
+  'Almost there...'
 ];
 
-const RESULT_QUIPS_GOOD = ['Looking great! 🎉','Strong scores!','Well done! ⭐','AI loves this site!'];
-const RESULT_QUIPS_BAD = ['Needs some work...','I can help fix this!','Don\'t worry, fixable!','Room to improve!'];
+const RESULT_QUIPS_GOOD = ['Looking great!','Strong scores!','Well done!','AI loves this site!','Impressive work!'];
+const RESULT_QUIPS_BAD = ['Needs some work...','I can help fix this!','Don\'t worry, fixable!','Room to improve!','Let\'s get this sorted!'];
+
+const IDLE_QUIPS = [
+  'Enter your URL above to get started!',
+  'I audit sites for AI search visibility.',
+  'ChatGPT, Claude, Perplexity... are they finding you?',
+  'Try adding a competitor to compare!',
+  'Your site could be invisible to AI. Let\'s check.',
+  'I\'ve audited thousands of sites. Yours next?',
+  'Schema markup matters more than you think!',
+  'Most sites score under 50. Where\'s yours?'
+];
+
+const SCROLL_QUIPS = {
+  scoreBars: 'These are your category breakdowns.',
+  platformSection: 'Can AI platforms actually find you?',
+  donutSection: 'Here\'s your issue breakdown at a glance.',
+  reportSections: 'Click a section to see the detail.',
+  actionPlan: 'Start with the high-impact items first!',
+  promptSection: 'Give this to your developer to fix everything.',
+  emailSection: 'Email yourself a copy to keep!'
+};
+
+let idleInterval=null;
+let scrollQuipsShown={};
+
+function startIdleChatter(){
+  clearInterval(idleInterval);
+  let idx=0;
+  idleInterval=setInterval(()=>{
+    if(robotMode==='idle'){
+      showBubble(IDLE_QUIPS[idx%IDLE_QUIPS.length],4000);
+      idx++;
+    }
+  },8000);
+}
+
+function stopIdleChatter(){
+  clearInterval(idleInterval);
+}
+
+function startScrollWatch(){
+  scrollQuipsShown={};
+  window.addEventListener('scroll',onScrollQuip);
+}
+
+function onScrollQuip(){
+  Object.entries(SCROLL_QUIPS).forEach(([id,msg])=>{
+    if(scrollQuipsShown[id])return;
+    const el=document.getElementById(id);
+    if(!el)return;
+    const rect=el.getBoundingClientRect();
+    if(rect.top<window.innerHeight*0.7&&rect.bottom>0){
+      scrollQuipsShown[id]=true;
+      showBubble(msg,3500);
+    }
+  });
+}
 
 // ── LIGHTNING ─────────────────────────────────────
 let ltInterval=null;
@@ -855,7 +912,10 @@ async function runAudit(){
   document.getElementById('sunRays').style.opacity='0';
 
   startLightning();
+  stopIdleChatter();
   robotResetPosition();
+  // Robot loading commentary
+  LOADING_QUIPS.forEach((q,i)=>setTimeout(()=>showBubble(q,1400),i*1600));
 
   const steps=['step1','step2','step3','step4','step5','step6'];
   const delays=[0,1600,3200,4800,6400,8000];
@@ -914,16 +974,17 @@ async function runAudit(){
     setTimeout(()=>robotMoveToElement('overallScore'), 600);
 
     // Then travels down through sections as they appear
-    setTimeout(()=>{ robotMoveToElement('scoreBars'); setRobotMode('excited'); showBubble('Your scores...'); }, 3000);
-    setTimeout(()=>{ robotMoveToElement('platformSection'); showBubble('Platform readiness...'); }, 5500);
-    setTimeout(()=>{ robotMoveToElement('reportSections'); showBubble('Detailed findings...'); }, 8000);
-    setTimeout(()=>{ robotMoveToElement('actionPlan'); setRobotMode('celebrate'); showBubble('Your action plan! 📋',4000); }, 11000);
-    setTimeout(()=>{ robotResetPosition(); setRobotMode('idle'); }, 15000);
+    setTimeout(()=>{ robotMoveToElement('scoreBars'); setRobotMode('excited'); showBubble('Let\'s look at your scores...'); }, 3000);
+    setTimeout(()=>{ robotMoveToElement('platformSection'); showBubble('Can AI platforms find you?'); }, 5500);
+    setTimeout(()=>{ robotMoveToElement('reportSections'); showBubble('Here are the detailed findings...'); }, 8000);
+    setTimeout(()=>{ robotMoveToElement('actionPlan'); setRobotMode('celebrate'); showBubble('Your action plan! Start with the top items.',4000); }, 11000);
+    setTimeout(()=>{ robotEl.classList.add('flying'); setRobotMode('idle'); startScrollWatch(); startIdleChatter(); }, 15000);
 
   }catch(e){
     stopLightning();
     setRobotMode('idle');
-    showBubble('Something went wrong...', 3000);
+    showBubble('Something went wrong... Try again!', 4000);
+    setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5000);
     document.getElementById('loadingState').style.display='none';
     steps.forEach(id=>document.getElementById(id).classList.remove('active','done'));
     document.getElementById('auditBtn').disabled=false;
