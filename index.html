@@ -374,6 +374,28 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 .robot-bubble{position:absolute;left:110px;top:0px;background:#fff;border-radius:18px 18px 18px 4px;padding:12px 18px;font-family:var(--sans);font-size:16px;font-weight:600;color:#0a0a0f;white-space:nowrap;opacity:0;transform:translateY(5px) scale(.95);transition:all .3s ease;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.1)}
 .robot-bubble::after{content:'';position:absolute;left:-6px;bottom:8px;width:12px;height:12px;background:#fff;border-radius:2px;transform:rotate(45deg)}
 .robot-bubble.show{opacity:1;transform:translateY(0) scale(1)}
+
+/* Welcome modal */
+.welcome-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);z-index:1500;display:none;align-items:center;justify-content:center;padding:24px}
+.welcome-overlay.open{display:flex}
+.welcome-modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;max-width:580px;width:100%;position:relative;overflow:hidden}
+.welcome-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),#fff,var(--accent2))}
+.welcome-close{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:20px;transition:all .2s;z-index:10}
+.welcome-close:hover{border-color:#fff;color:#fff}
+.welcome-body{padding:40px 36px 36px}
+.welcome-title{font-family:var(--serif);font-size:32px;color:var(--text);margin-bottom:6px}
+.welcome-title em{color:var(--accent2);font-style:italic}
+.welcome-sub{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.welcome-feature{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:18px}
+.welcome-feature-icon{font-size:22px;margin-bottom:8px;display:block}
+.welcome-feature-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.welcome-feature-desc{font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.5}
+.welcome-results{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.welcome-tag{font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);padding:5px 12px;border-radius:100px}
+.welcome-cta{width:100%;background:var(--accent2);color:#fff;border:none;border-radius:14px;padding:16px;font-family:var(--sans);font-size:16px;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.welcome-cta:hover{background:#e06b10;transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.4)}
+@media(max-width:600px){.welcome-features{grid-template-columns:1fr}.welcome-body{padding:28px 24px 24px}}
 </style>
 </head>
 <body>
@@ -388,6 +410,47 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 </div>
 <div class="storm-cloud" id="cloud1" style="width:450px;height:220px;top:-60px;left:-120px"></div>
 <div class="storm-cloud" id="cloud2" style="width:550px;height:280px;top:-90px;right:-120px"></div>
+
+<!-- WELCOME MODAL -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-modal">
+    <button class="welcome-close" onclick="closeWelcome()">&#10005;</button>
+    <div class="welcome-body">
+      <div class="welcome-title">Welcome to <em>GEO Audit</em></div>
+      <div class="welcome-sub">Find out if AI search engines can see your website. Get a scored report with a prioritised action plan.</div>
+      <div class="welcome-features">
+        <div class="welcome-feature">
+          <span class="welcome-feature-icon">&#9889;</span>
+          <div class="welcome-feature-title">AI Visibility Score</div>
+          <div class="welcome-feature-desc">Overall score out of 100 showing how visible your site is to AI search engines.</div>
+        </div>
+        <div class="welcome-feature">
+          <span class="welcome-feature-icon">&#9776;</span>
+          <div class="welcome-feature-title">6 Category Breakdown</div>
+          <div class="welcome-feature-desc">AI Crawlers, Citation Readiness, Schema, Brand Authority, Content Quality, Technical SEO.</div>
+        </div>
+        <div class="welcome-feature">
+          <span class="welcome-feature-icon">&#8960;</span>
+          <div class="welcome-feature-title">Platform Readiness</div>
+          <div class="welcome-feature-desc">See if ChatGPT, Claude, Perplexity, Gemini and Google AI can find and cite your site.</div>
+        </div>
+        <div class="welcome-feature">
+          <span class="welcome-feature-icon">&#9881;</span>
+          <div class="welcome-feature-title">Action Plan</div>
+          <div class="welcome-feature-desc">Prioritised fixes ranked by impact. Give the report to your web developer to implement.</div>
+        </div>
+      </div>
+      <div class="welcome-results">
+        <span class="welcome-tag">Competitor comparison</span>
+        <span class="welcome-tag">Issue breakdown chart</span>
+        <span class="welcome-tag">Email report</span>
+        <span class="welcome-tag">Score history tracking</span>
+        <span class="welcome-tag">AI fix prompt</span>
+      </div>
+      <button class="welcome-cta" onclick="closeWelcome()">Let's Go &#8594;</button>
+    </div>
+  </div>
+</div>
 
 <!-- FLOATING ROBOT -->
 <div id="robotMascot">
@@ -625,11 +688,17 @@ function checkPassword(){
 function unlockSite(){
   const s=document.getElementById('passwordScreen');
   s.classList.add('fade-out');
-  setTimeout(()=>s.style.display='none',900);
-  // Make robot visible immediately
-  setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},1500);
-  // Start flying and idle chatter after bubble
-  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},6000);
+  setTimeout(()=>{
+    s.style.display='none';
+    document.getElementById('welcomeOverlay').classList.add('open');
+  },900);
+}
+
+function closeWelcome(){
+  document.getElementById('welcomeOverlay').classList.remove('open');
+  // Now start the robot and app
+  setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},500);
+  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5000);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
