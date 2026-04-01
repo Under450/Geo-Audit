@@ -62,7 +62,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .user-info-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-family:var(--mono);font-size:16px;color:var(--text);outline:none;transition:all .2s}
 .user-info-input::placeholder{color:var(--muted)}
 .user-info-input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
-header{text-align:center;margin-bottom:20px;position:relative;overflow:visible}
+header{text-align:center;margin-bottom:20px}
 .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:100px;padding:8px 20px;font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px;transition:all 2.5s ease}
 .badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
@@ -129,8 +129,10 @@ h1 em{font-style:italic;color:var(--accent2);text-shadow:0 0 12px rgba(249,115,2
 .section-icon{font-size:20px}
 .section-badge{font-family:var(--mono);font-size:14px;padding:4px 14px;border-radius:100px;letter-spacing:.06em;white-space:nowrap;margin-top:4px}
 .badge-green{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.2)}
-.badge-amber{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
-.badge-red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.badge-amber{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3);animation:pulseAmber 1.5s ease-in-out infinite}
+@keyframes pulseAmber{0%,100%{box-shadow:0 0 4px rgba(245,158,11,.2)}50%{box-shadow:0 0 14px rgba(245,158,11,.5),0 0 28px rgba(245,158,11,.2)}}
+.badge-red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);animation:pulseRed 1.5s ease-in-out infinite}
+@keyframes pulseRed{0%,100%{box-shadow:0 0 4px rgba(239,68,68,.2)}50%{box-shadow:0 0 14px rgba(239,68,68,.5),0 0 28px rgba(239,68,68,.2)}}
 .badge-purple{background:rgba(255,255,255,.1);color:#dce6ff;border:1px solid rgba(255,255,255,.25)}
 
 /* Client explanation strip */
@@ -198,7 +200,7 @@ h1 em{font-style:italic;color:var(--accent2);text-shadow:0 0 12px rgba(249,115,2
 
 /* Email + PDF buttons */
 .email-section{text-align:center;margin-top:32px;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;transition:background 2.5s ease,border-color 2.5s ease}
-.email-row{display:flex;gap:12px;align-items:stretch;max-width:560px;margin:0 auto}
+.email-row{display:flex;gap:12px;align-items:stretch;max-width:100%}
 .email-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-family:var(--mono);font-size:15px;color:var(--text);outline:none;transition:all .2s;min-width:0}
 .email-input::placeholder{color:var(--muted)}
 .email-input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
@@ -240,13 +242,12 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 .error-msg{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:16px 20px;font-family:var(--mono);font-size:12px;color:var(--red);margin-top:16px;display:none}
 .error-msg.visible{display:block}
 
-@media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:80px}.user-info{flex-direction:column}.email-row{flex-direction:column}}
+@media(max-width:600px){.input-row{flex-direction:column}.comp-row{flex-direction:column}.container{padding:40px 16px 60px}h1{font-size:36px}.overall-number{font-size:80px}.user-info{flex-direction:column}.email-row{flex-direction:column}.score-bars{grid-template-columns:1fr}}
 
 /* Score bars */
-.score-bars{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;margin-bottom:24px;position:relative;overflow:hidden}
-.score-bars::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
-.bar-row{margin-bottom:20px}
-.bar-row:last-child{margin-bottom:0}
+.score-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.bar-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.bar-row::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
 .bar-header{display:flex;justify-content:space-between;font-family:var(--mono);font-size:15px;margin-bottom:10px}
 .bar-name{color:var(--muted);font-weight:400}
 .bar-val{font-weight:700;font-size:16px}
@@ -310,16 +311,22 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 /* ═══════════════════════════════════════════
    ROBOT — now free-floating and animated
 ═══════════════════════════════════════════ */
-#robotMascot{position:fixed;right:24px;bottom:80px;z-index:500;pointer-events:none;transition:all 1.2s cubic-bezier(.34,1.56,.64,1)}
-@media(max-width:900px){#robotMascot{display:none}}
-.robot{transform-style:preserve-3d;perspective:400px}
-/* Default idle float */
-.robot.idle{animation:robotFloat 4s ease-in-out infinite}
+#robotMascot{position:fixed;z-index:500;pointer-events:none;animation:robotFly 20s ease-in-out infinite}
+@keyframes robotFly{
+  0%{top:15%;right:5%;transform:scale(0.9) rotate(-3deg)}
+  15%{top:60%;right:70%;transform:scale(1) rotate(5deg)}
+  30%{top:10%;right:40%;transform:scale(0.85) rotate(-5deg)}
+  45%{top:70%;right:10%;transform:scale(1.05) rotate(3deg)}
+  60%{top:30%;right:80%;transform:scale(0.9) rotate(-4deg)}
+  75%{top:80%;right:50%;transform:scale(1) rotate(2deg)}
+  100%{top:15%;right:5%;transform:scale(0.9) rotate(-3deg)}
+}
+.robot{animation:robotWobble 3s ease-in-out infinite;transform-style:preserve-3d;perspective:400px}
+@keyframes robotWobble{0%,100%{transform:translateY(0) rotateY(-3deg)}50%{transform:translateY(-8px) rotateY(3deg)}}
 /* Excited — watching results */
 .robot.excited{animation:robotExcited 0.6s ease-in-out infinite}
 /* Celebrate */
 .robot.celebrate{animation:robotCelebrate 0.5s ease-in-out infinite}
-@keyframes robotFloat{0%,100%{transform:translateY(0) rotateY(-5deg)}50%{transform:translateY(-12px) rotateY(5deg)}}
 @keyframes robotExcited{0%,100%{transform:translateY(0) rotateY(-8deg) rotateZ(-3deg)}50%{transform:translateY(-18px) rotateY(8deg) rotateZ(3deg)}}
 @keyframes robotCelebrate{0%,100%{transform:translateY(0) rotateZ(-5deg) scale(1.05)}25%{transform:translateY(-20px) rotateZ(5deg) scale(1.1)}50%{transform:translateY(-8px) rotateZ(-3deg) scale(1.05)}75%{transform:translateY(-16px) rotateZ(3deg) scale(1.08)}}
 .robot-head{width:70px;height:58px;background:linear-gradient(135deg,#1a1a2e,#16162a);border:2px solid rgba(249,115,22,.3);border-radius:14px;position:relative;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05),0 0 30px rgba(249,115,22,.08)}
@@ -500,7 +507,7 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
       <div id="priorityItems"></div>
     </div>
     <div class="prompt-section" id="promptSection" style="display:none">
-      <div class="prompt-label">Would you like the AI prompt to fix these issues?</div>
+      <div class="prompt-label">Would you like the AI prompt to fix these issues to give to your Web Developer?</div>
       <button class="prompt-btn" onclick="showPrompt()">&#9889; Get AI Fix Prompt</button>
     </div>
     <div class="email-section" id="emailSection" style="display:none">
