@@ -1053,7 +1053,7 @@ function renderResults(data,url){
     const fh=(s.findings||[]).map(f=>`<div class="content-item"><div class="item-indicator ${ic(f.type)}"></div><div class="item-content"><div class="item-title">${f.title}</div><div class="item-desc">${f.description}</div>${f.action?`<div class="item-action">\u2197 ${f.action}</div>`:''}</div></div>`).join('');
     el.innerHTML=`
       <div class="section-header">
-        <div class="section-title"><span class="section-icon">${s.icon||'📋'}</span>${s.title}</div>
+        <div class="section-title"><span class="section-icon">${s.icon||'&#x1F4CB;'}</span>${s.title}</div>
         <span class="section-badge ${b.cls}">${b.label}</span>
       </div>
       ${explanation?`<div class="section-explanation">${explanation}</div>`:''}
