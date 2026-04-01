@@ -711,10 +711,10 @@ function startIdleChatter(){
   let idx=0;
   idleInterval=setInterval(()=>{
     if(robotMode==='idle'){
-      showBubble(IDLE_QUIPS[idx%IDLE_QUIPS.length],4000);
+      showBubble(IDLE_QUIPS[idx%IDLE_QUIPS.length],2200);
       idx++;
     }
-  },8000);
+  },2500);
 }
 
 function stopIdleChatter(){
