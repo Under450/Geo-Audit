@@ -326,22 +326,6 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 .robot-shadow{width:50px;height:8px;background:radial-gradient(ellipse,rgba(249,115,22,.15),transparent);margin:8px auto 0;border-radius:50%;animation:shadowPulse 4s ease-in-out infinite}
 @keyframes shadowPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(.85);opacity:.5}}
 
-/* Print stylesheet */
-@media print{
-  #passwordScreen,.bg-grid,.bg-glow,.sky-overlay,.sun,.sun-rays,.lightning-container,.storm-cloud,.input-section,#loadingState,.prompt-section,.email-section,footer,.prompt-overlay,.history-banner{display:none!important}
-  body{background:#fff!important;color:#000!important}
-  .container{max-width:100%;padding:0}
-  #results{display:block!important}
-  .overall-score,.score-card,.report-section,.action-plan,.comparison,.score-bars,.platform-section,.donut-section,.timeline-section{opacity:1!important;break-inside:avoid}
-  .overall-score::before{background:#333!important}
-  .score-card::before{print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  .report-section{break-inside:avoid}
-  .section-body{max-height:none!important;padding:16px!important}
-  .results-header,.overall-score,.score-grid,.score-bars,.comparison,.platform-section,.donut-section,.timeline-section,#reportSections,.action-plan{margin-bottom:16px}
-  .results-title{color:#000!important;font-size:20px!important}
-  .results-title .print-name{color:#f97316!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  *{transition:none!important;animation:none!important}
-}
 </style>
 </head>
 <body>
