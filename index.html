@@ -378,21 +378,21 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 /* Welcome modal */
 .welcome-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);z-index:1500;display:none;align-items:center;justify-content:center;padding:24px}
 .welcome-overlay.open{display:flex}
-.welcome-modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;max-width:580px;width:100%;position:relative;overflow:hidden}
+.welcome-modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;max-width:720px;width:100%;position:relative;overflow:hidden}
 .welcome-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),#fff,var(--accent2))}
 .welcome-close{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:20px;transition:all .2s;z-index:10}
 .welcome-close:hover{border-color:#fff;color:#fff}
-.welcome-body{padding:40px 36px 36px}
-.welcome-title{font-family:var(--serif);font-size:32px;color:var(--text);margin-bottom:6px}
+.welcome-body{padding:48px 44px 44px}
+.welcome-title{font-family:var(--serif);font-size:40px;color:var(--text);margin-bottom:10px}
 .welcome-title em{color:var(--accent2);font-style:italic}
-.welcome-sub{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.welcome-sub{font-family:var(--mono);font-size:17px;color:var(--muted);margin-bottom:32px;line-height:1.7}
 .welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
-.welcome-feature{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:18px}
-.welcome-feature-icon{font-size:22px;margin-bottom:8px;display:block}
-.welcome-feature-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
-.welcome-feature-desc{font-family:var(--mono);font-size:13px;color:var(--muted);line-height:1.5}
+.welcome-feature{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:22px}
+.welcome-feature-icon{font-size:26px;margin-bottom:10px;display:block}
+.welcome-feature-title{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px}
+.welcome-feature-desc{font-family:var(--mono);font-size:15px;color:var(--muted);line-height:1.6}
 .welcome-results{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
-.welcome-tag{font-family:var(--mono);font-size:12px;color:var(--accent2);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);padding:5px 12px;border-radius:100px}
+.welcome-tag{font-family:var(--mono);font-size:14px;color:var(--accent2);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);padding:5px 12px;border-radius:100px}
 .welcome-cta{width:100%;background:var(--accent2);color:#fff;border:none;border-radius:14px;padding:16px;font-family:var(--sans);font-size:16px;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;text-transform:uppercase}
 .welcome-cta:hover{background:#e06b10;transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.4)}
 @media(max-width:600px){.welcome-features{grid-template-columns:1fr}.welcome-body{padding:28px 24px 24px}}
@@ -686,19 +686,19 @@ function checkPassword(){
 }
 
 function unlockSite(){
-  const s=document.getElementById('passwordScreen');
-  s.classList.add('fade-out');
-  setTimeout(()=>{
-    s.style.display='none';
-    document.getElementById('welcomeOverlay').classList.add('open');
-  },900);
+  // Keep password screen as black background, show welcome on top
+  document.getElementById('welcomeOverlay').classList.add('open');
 }
 
 function closeWelcome(){
   document.getElementById('welcomeOverlay').classList.remove('open');
-  // Now start the robot and app
-  setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},500);
-  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5000);
+  // NOW remove password screen and show the app
+  const s=document.getElementById('passwordScreen');
+  s.classList.add('fade-out');
+  setTimeout(()=>s.style.display='none',900);
+  // Start robot after app reveals
+  setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},1500);
+  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5500);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
