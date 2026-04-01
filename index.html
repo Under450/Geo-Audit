@@ -47,7 +47,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .pw-lock{font-size:48px;margin-bottom:24px;display:block}
 .pw-title{font-family:var(--serif);font-size:30px;color:var(--text);margin-bottom:8px}
 .pw-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:32px;letter-spacing:.06em}
-.pw-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-family:var(--mono);font-size:20px;color:var(--text);outline:none;text-align:center;letter-spacing:.3em;transition:all .2s;margin-bottom:12px}
+.pw-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.5);border-radius:12px;padding:14px 18px;font-family:var(--mono);font-size:20px;color:var(--text);outline:none;text-align:center;letter-spacing:.3em;transition:all .2s;margin-bottom:12px;box-shadow:0 0 15px rgba(255,255,255,.3),0 0 30px rgba(255,255,255,.15),0 0 50px rgba(255,255,255,.05);animation:pwGlow 2.5s ease-in-out infinite}
+@keyframes pwGlow{0%,100%{box-shadow:0 0 15px rgba(255,255,255,.3),0 0 30px rgba(255,255,255,.15)}50%{box-shadow:0 0 20px rgba(255,255,255,.5),0 0 40px rgba(255,255,255,.25),0 0 60px rgba(255,255,255,.1)}}
 .pw-input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
 .pw-btn{width:100%;background:var(--accent2);color:#fff;border:none;border-radius:12px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:12px}
 .pw-btn:hover{background:#e06b10;transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.4)}
