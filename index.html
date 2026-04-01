@@ -558,26 +558,73 @@ const SECTION_EXPLANATIONS = {
 };
 
 // ── PASSWORD ──────────────────────────────────────
-const ACCESS_CODE = 'geo2026';
+const MASTER_CODE = 'geo2026';
+const GUEST_CODES = {
+  'GEOAUDIT01': { max: 3, label: 'Guest Pass 1' },
+  'GEOAUDIT02': { max: 3, label: 'Guest Pass 2' },
+  'GEOAUDIT03': { max: 3, label: 'Guest Pass 3' }
+};
+
+function getGuestUses(){
+  try{return JSON.parse(localStorage.getItem('geo_guest_uses')||'{}');}catch(e){return{};}
+}
+function saveGuestUses(uses){
+  localStorage.setItem('geo_guest_uses',JSON.stringify(uses));
+}
 
 function checkPassword(){
-  const val=document.getElementById('pwInput').value;
+  const val=document.getElementById('pwInput').value.trim();
   const err=document.getElementById('pwError');
   const box=document.querySelector('.pw-box');
-  if(val===ACCESS_CODE){
-    const s=document.getElementById('passwordScreen');
-    s.classList.add('fade-out');
-    setTimeout(()=>s.style.display='none',900);
-    // Robot: show bubble then start flying
-    setTimeout(()=>showBubble('What are you waiting for?',4000),1800);
-    setTimeout(()=>{bubble.classList.remove('show');robotEl.classList.add('flying');},6500);
-  } else {
-    err.classList.add('show');
-    box.classList.add('pw-shake');
-    setTimeout(()=>box.classList.remove('pw-shake'),400);
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
+
+  // Master code — unlimited
+  if(val===MASTER_CODE){
+    unlockSite();
+    return;
   }
+
+  // Guest codes — limited to 3 uses each
+  const upperVal=val.toUpperCase();
+  if(GUEST_CODES[upperVal]){
+    const uses=getGuestUses();
+    const used=uses[upperVal]||0;
+    if(used>=GUEST_CODES[upperVal].max){
+      // Expired — show robot message
+      err.textContent='This access code has expired.';
+      err.classList.add('show');
+      box.classList.add('pw-shake');
+      setTimeout(()=>box.classList.remove('pw-shake'),400);
+      document.getElementById('pwInput').value='';
+      // Show password screen but reveal robot with message
+      setTimeout(()=>{
+        showBubble('Your code has expired! Contact Craig for more access.',8000);
+      },600);
+      return;
+    }
+    // Valid guest code — increment use count
+    uses[upperVal]=used+1;
+    saveGuestUses(uses);
+    const remaining=GUEST_CODES[upperVal].max-uses[upperVal];
+    unlockSite();
+    setTimeout(()=>showBubble(remaining>0?'You have '+remaining+' use'+(remaining===1?'':'s')+' remaining.':'This is your last use! Contact Craig for more access.',5000),1800);
+    return;
+  }
+
+  // Invalid code
+  err.textContent='Incorrect access code. Try again.';
+  err.classList.add('show');
+  box.classList.add('pw-shake');
+  setTimeout(()=>box.classList.remove('pw-shake'),400);
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwInput').focus();
+}
+
+function unlockSite(){
+  const s=document.getElementById('passwordScreen');
+  s.classList.add('fade-out');
+  setTimeout(()=>s.style.display='none',900);
+  setTimeout(()=>showBubble('What are you waiting for?',4000),1800);
+  setTimeout(()=>{bubble.classList.remove('show');robotEl.classList.add('flying');},6500);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
