@@ -312,20 +312,8 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 /* ═══════════════════════════════════════════
    ROBOT — now free-floating and animated
 ═══════════════════════════════════════════ */
-#robotMascot{position:fixed;z-index:500;pointer-events:none;top:33%;left:30px;opacity:0}
-#robotMascot.visible{opacity:1;transition:opacity .5s}
-#robotMascot.flying{opacity:1;animation:robotFly 22s ease-in-out infinite}
-@keyframes robotEnter{from{left:-120px;opacity:0}to{left:30px;opacity:1}}
-@keyframes robotFly{
-  0%{top:33%;left:40px;transform:scale(0.9) rotate(-2deg)}
-  14%{top:8%;left:40px;transform:scale(0.85) rotate(3deg)}
-  28%{top:6%;left:calc(100vw - 300px);transform:scale(0.9) rotate(-4deg)}
-  42%{top:65%;left:calc(100vw - 300px);transform:scale(1) rotate(3deg)}
-  56%{top:80%;left:45%;transform:scale(0.9) rotate(-2deg)}
-  70%{top:80%;left:40px;transform:scale(0.95) rotate(4deg)}
-  84%{top:50%;left:40px;transform:scale(1) rotate(-3deg)}
-  100%{top:33%;left:40px;transform:scale(0.9) rotate(-2deg)}
-}
+#robotMascot{position:fixed;z-index:500;pointer-events:none;top:33%;left:40px;opacity:0;transition:top 2.5s cubic-bezier(.4,0,.2,1),left 2.5s cubic-bezier(.4,0,.2,1),transform 2.5s ease}
+#robotMascot.visible{opacity:1;transition:opacity .5s,top 2.5s cubic-bezier(.4,0,.2,1),left 2.5s cubic-bezier(.4,0,.2,1),transform 2.5s ease}
 .robot{animation:robotWobble 3s ease-in-out infinite;transform-style:preserve-3d;perspective:400px}
 @keyframes robotWobble{0%,100%{transform:translateY(0) rotateY(-3deg)}50%{transform:translateY(-8px) rotateY(3deg)}}
 /* Excited — watching results */
@@ -698,7 +686,7 @@ function closeWelcome(){
   setTimeout(()=>s.style.display='none',900);
   // Start robot after app reveals
   setTimeout(()=>{robotEl.classList.add('visible');showBubble('What are you waiting for?',4000);},1500);
-  setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5500);
+  setTimeout(()=>{startRandomFlight();startIdleChatter();},5500);
 }
 document.getElementById('pwInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')checkPassword();
@@ -721,11 +709,12 @@ function showBubble(text, duration=3000) {
   clearTimeout(bubbleTimer);
   bubble.textContent = text;
   bubble.classList.add('show');
-  // Pause flying while talking
-  robotEl.style.animationPlayState='paused';
+  // Pause random flight while talking
+  clearInterval(flyInterval);
   bubbleTimer = setTimeout(() => {
     bubble.classList.remove('show');
-    robotEl.style.animationPlayState='running';
+    // Resume random flight
+    if(robotMode==='idle'){flyInterval=setInterval(moveRobotRandom,3500);}
   }, duration);
 }
 
@@ -757,7 +746,7 @@ const RESULT_QUIPS_GOOD = ['Looking great!','Strong scores!','Well done!','AI lo
 const RESULT_QUIPS_BAD = ['Needs some work...','I can help fix this!','Don\'t worry, fixable!','Room to improve!','Let\'s get this sorted!'];
 
 const IDLE_QUIPS = [
-  'Enter your URL above to get started!',
+  'Enter your URL below to get started!',
   'I audit sites for AI search visibility.',
   'ChatGPT, Claude, Perplexity... are they finding you?',
   'Try adding a competitor to compare!',
@@ -793,6 +782,27 @@ function startIdleChatter(){
 
 function stopIdleChatter(){
   clearInterval(idleInterval);
+}
+
+let flyInterval=null;
+function startRandomFlight(){
+  clearInterval(flyInterval);
+  moveRobotRandom();
+  flyInterval=setInterval(moveRobotRandom,3500);
+}
+function stopRandomFlight(){
+  clearInterval(flyInterval);
+}
+function moveRobotRandom(){
+  const maxX=window.innerWidth-250;
+  const maxY=window.innerHeight-180;
+  const x=40+Math.random()*(maxX-40);
+  const y=60+Math.random()*(maxY-60);
+  const rot=-6+Math.random()*12;
+  const sc=0.85+Math.random()*0.2;
+  robotEl.style.left=x+'px';
+  robotEl.style.top=y+'px';
+  robotEl.style.transform='scale('+sc+') rotate('+rot+'deg)';
 }
 
 function startScrollWatch(){
@@ -1056,13 +1066,13 @@ async function runAudit(){
     setTimeout(()=>{ robotMoveToElement('platformSection'); showBubble('Can AI platforms find you?'); }, 5500);
     setTimeout(()=>{ robotMoveToElement('reportSections'); showBubble('Here are the detailed findings...'); }, 8000);
     setTimeout(()=>{ robotMoveToElement('actionPlan'); setRobotMode('celebrate'); showBubble('Your action plan! Start with the top items.',4000); }, 11000);
-    setTimeout(()=>{ robotEl.classList.add('flying'); setRobotMode('idle'); startScrollWatch(); startIdleChatter(); }, 15000);
+    setTimeout(()=>{ startRandomFlight(); setRobotMode('idle'); startScrollWatch(); startIdleChatter(); }, 15000);
 
   }catch(e){
     stopLightning();
     setRobotMode('idle');
     showBubble('Something went wrong... Try again!', 4000);
-    setTimeout(()=>{robotEl.classList.add('flying');startIdleChatter();},5000);
+    setTimeout(()=>{startRandomFlight();startIdleChatter();},5000);
     document.getElementById('loadingState').style.display='none';
     steps.forEach(id=>document.getElementById(id).classList.remove('active','done'));
     document.getElementById('auditBtn').disabled=false;
