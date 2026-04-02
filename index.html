@@ -322,7 +322,7 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 .robot.celebrate{animation:robotCelebrate 0.5s ease-in-out infinite}
 @keyframes robotExcited{0%,100%{transform:translateY(0) rotateY(-8deg) rotateZ(-3deg)}50%{transform:translateY(-18px) rotateY(8deg) rotateZ(3deg)}}
 @keyframes robotCelebrate{0%,100%{transform:translateY(0) rotateZ(-5deg) scale(1.05)}25%{transform:translateY(-20px) rotateZ(5deg) scale(1.1)}50%{transform:translateY(-8px) rotateZ(-3deg) scale(1.05)}75%{transform:translateY(-16px) rotateZ(3deg) scale(1.08)}}
-.robot-head{width:70px;height:58px;background:linear-gradient(135deg,#1a1a2e,#16162a);border:2px solid rgba(249,115,22,.3);border-radius:14px;position:relative;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05),0 0 30px rgba(249,115,22,.08)}
+.robot-head{width:70px;height:58px;background:linear-gradient(135deg,#1a1a2e,#16162a);border:2px solid rgba(249,115,22,.7);border-radius:14px;position:relative;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05),0 0 20px rgba(249,115,22,.3),0 0 40px rgba(249,115,22,.15)}
 .robot-antenna{width:3px;height:18px;background:linear-gradient(180deg,transparent,rgba(249,115,22,.4));position:absolute;top:-18px;left:50%;transform:translateX(-50%)}
 .robot-antenna::after{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#f97316;box-shadow:0 0 10px #f97316,0 0 20px rgba(249,115,22,.5);animation:antennaPulse 2s ease-in-out infinite}
 @keyframes antennaPulse{0%,100%{box-shadow:0 0 10px #f97316,0 0 20px rgba(249,115,22,.5)}50%{box-shadow:0 0 16px #f97316,0 0 32px rgba(249,115,22,.7),0 0 48px rgba(249,115,22,.3)}}
@@ -339,11 +339,11 @@ footer a{color:var(--accent);text-decoration:none;transition:color 2.5s ease}
 @keyframes eyeWide{0%,100%{transform:scale(1.2)}50%{transform:scale(1.4)}}
 .robot-mouth{width:20px;height:3px;background:rgba(249,115,22,.3);border-radius:2px;margin:8px auto 0;box-shadow:0 0 6px rgba(249,115,22,.2);transition:all .3s}
 .robot.celebrate .robot-mouth{width:28px;height:6px;border-radius:10px 10px 4px 4px;background:rgba(249,115,22,.6);box-shadow:0 0 10px rgba(249,115,22,.4)}
-.robot-body{width:56px;height:50px;background:linear-gradient(135deg,#1a1a2e,#14142a);border:2px solid rgba(249,115,22,.2);border-radius:8px 8px 12px 12px;margin:4px auto 0;position:relative;box-shadow:0 6px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04)}
+.robot-body{width:56px;height:50px;background:linear-gradient(135deg,#1a1a2e,#14142a);border:2px solid rgba(249,115,22,.6);border-radius:8px 8px 12px 12px;margin:4px auto 0;position:relative;box-shadow:0 6px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04),0 0 18px rgba(249,115,22,.25),0 0 36px rgba(249,115,22,.1)}
 .robot-body::before{content:'';position:absolute;inset:6px;background:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(249,115,22,.05) 6px,rgba(249,115,22,.05) 7px);border-radius:4px}
 .robot-chest{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.6),rgba(249,115,22,.1));position:absolute;top:10px;left:50%;transform:translateX(-50%);box-shadow:0 0 10px rgba(249,115,22,.3);animation:chestPulse 3s ease-in-out infinite}
 @keyframes chestPulse{0%,100%{opacity:.6;box-shadow:0 0 10px rgba(249,115,22,.3)}50%{opacity:1;box-shadow:0 0 18px rgba(249,115,22,.5)}}
-.robot-arm{width:10px;height:30px;background:linear-gradient(180deg,#1a1a2e,#14142a);border:1.5px solid rgba(249,115,22,.15);border-radius:5px;position:absolute;top:8px}
+.robot-arm{width:10px;height:30px;background:linear-gradient(180deg,#1a1a2e,#14142a);border:1.5px solid rgba(249,115,22,.5);border-radius:5px;position:absolute;top:8px;box-shadow:0 0 10px rgba(249,115,22,.2)}
 .robot-arm-l{left:-14px;transform:rotate(8deg)}
 .robot-arm-r{right:-14px;transform:rotate(-8deg)}
 .robot.idle .robot-arm-l{animation:armSwing 4s ease-in-out infinite}
